@@ -10,6 +10,22 @@ with open('/var/www/html/Database/.config.json') as f:
 
 cnx = MysqlCnx(**config)
 
+class teacher(BaseModel):
+    id:int
+    name:str
+    dept: Optional[int]= None
+    phone:Optional[str]= None
+    mobile:Optional[str]= None
+
+class world(BaseModel):
+    name:str
+    continent:Optional[str]= None
+    area: Optional[float]= None
+    population:Optional[float]= None
+    gdp:Optional[float]= None
+    capital:Optional[str]= None
+    tld:Optional[str]= None
+    flag:Optional[str]= None
 app = FastAPI()
 
 @app.get("/")
@@ -203,7 +219,44 @@ async def getjoinsone(count:int):
             'sql':sql
         }
         return response
+@app.post("/teacher")
+async def postteachers(item:teacher):
+    sql = f"""
+    INSERT INTO teacher (id, dept,name,phone,mobile)
+    VALUES ('{item.id}', '{item.dept}','{item.name}','{item.phone}', '{item.mobile}');"""
+    res = cnx.query(sql)
+    return res
+@app.patch("/worldpatch")
+async def patchworld(item:world):
+    response ={}
+    sql ="UPDATE `world` SET"
+    if(item.continent!=None):
+        response['continent'] = item.continent
+    if(item.area!=None):
+        response['area'] = item.area
+    if(item.population!=None):
+        response['population'] = item.population
+    if(item.gdp!=None):
+        response['gdp'] = item.gdp
+    if(item.capital!=None):
+        response['capital'] = item.capital
+    if(item.tld!=None):
+        response['tld'] = item.tld
+    if(item.flag!=None):
+        response['flag'] = item.flag
+
+    sql = sql+" "
+    for x,y in response.items():
+        sql = sql + '`' + x +'`'  + " " + "="+ " "+ "'" +str(y) +"'"  + ","
+    sql =sql[:-1]
+    sql = sql + " WHERE `world`.`name` = "
+    sql = sql + "'"+str(item.name)+"'"
+    sql = sql + ";"
+    res = cnx.query(sql)
+    return res
     
+
+
 
 
 
