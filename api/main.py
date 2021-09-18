@@ -2,8 +2,9 @@
 import json
 from mysqlCnx import MysqlCnx
 from typing import Optional
-from fastapi import FastAPI
+from fastapi import FastAPI,Request
 from pydantic import BaseModel;
+from fastapi.responses import RedirectResponse,HTMLResponse
 
 with open('/var/www/html/Database/.config.json') as f:
     config = json.loads(f.read())
@@ -28,11 +29,32 @@ class world(BaseModel):
     flag:Optional[str]= None
 app = FastAPI()
 
-@app.get("/")
-async def root():
-    return {"message":"hello world"}
+@app.get("/routes")
+def get_all_urls():
+    url_list = [{"path": route.path, "name": route.name} for route in app.routes]
+    return url_list
 
-@app.get("/basics") 
+@app.get("/",response_class=HTMLResponse)
+async def root():
+    test ="""
+        <a href= basics>basics</a><br>
+        <a href= basics/1>basics individual</a><br>
+        <a href= world>world</a><br>
+        <a href= world/1>world individual</a><br>
+        <a href= nobel>nobel</a><br>
+        <a href= nobel/1>nobel individual</a><br>
+        <a href= within>within</a><br>
+        <a href= within/1>within individual</a><br>
+        <a href= aggregate>aggregate</a><br>
+        <a href= aggregate/1>aggregate individual</a><br>
+        <a href= joins>joins</a><br>
+        <a href= joins/1>joins individual</a><br>
+        <a href= all>all</a><br>
+    """
+    return test
+
+
+@app.get("/basics",name ="basics") 
 async def getallbasic():
     result = cnx.query(f"SELECT * FROM sqlzoo WHERE groupname ='basics'") 
     finalresult =[]
@@ -63,7 +85,7 @@ async def getonebasic(count:int):
             'sql':sql
         }
         return response
-@app.get("/world")
+@app.get("/world",name ="world")
 async def getworldall():
     result = cnx.query(f"SELECT * FROM sqlzoo WHERE groupname ='world'") 
     finalresult =[]
@@ -94,7 +116,7 @@ async def getonworld(count:int):
             'sql':sql
         }
         return response
-@app.get("/nobel")
+@app.get("/nobel",name ="nobel")
 async def getnobelall():
     result = cnx.query(f"SELECT * FROM sqlzoo WHERE groupname ='nobel'") 
     finalresult =[]
@@ -125,7 +147,7 @@ async def getnobelone(count:int):
             'sql':sql
         }
         return response
-@app.get("/within")
+@app.get("/within",name="within")
 async def getwithinall():
     result = cnx.query(f"SELECT * FROM `sqlzoo` WHERE groupname LIKE 'SELECT%'") 
     finalresult =[]
@@ -157,7 +179,7 @@ async def getwithinone(count:int):
         }
         return response
 
-@app.get("/aggregate")
+@app.get("/aggregate", name="aggregate")
 async def getaggregateall():
     result = cnx.query(f"SELECT * FROM `sqlzoo` WHERE groupname ='SUMndCOUNT'") 
     finalresult =[]
@@ -188,7 +210,7 @@ async def getaggregateone(count:int):
             'sql':sql
         }
         return response
-@app.get("/joins")
+@app.get("/joins",name ="joins")
 async def getjoinsall():
     result = cnx.query(f"SELECT * FROM `sqlzoo` WHERE groupname ='JOIN'") 
     finalresult =[]
@@ -204,6 +226,7 @@ async def getjoinsall():
         }
         finalresult.append(response)
     return finalresult
+
 @app.get("/joins/{count}")
 async def getjoinsone(count:int):
     result = cnx.query(f"SELECT * FROM `sqlzoo` WHERE groupname ='JOIN' AND count ={count}")
@@ -219,6 +242,61 @@ async def getjoinsone(count:int):
             'sql':sql
         }
         return response
+@app.get("/all")
+async def getall():
+    response =[]
+    basic ={
+        "route":"/basics",
+        "Questions":[]
+    }
+    world ={
+        "route":"/world",
+        "Questions":[]
+    }
+    nobel ={
+        "route":"/nobel",
+        "Questions":[]
+    }
+    within ={
+        "route":"/within",
+        "Questions":[]
+    }
+    aggregate ={
+        "route":"/aggregate",
+        "Questions":[]
+    }
+    joins ={
+        "route":"/joins",
+        "Questions":[]
+    }
+    sql =f"""
+    SELECT Question, groupname FROM `sqlzoo`
+    GROUP BY groupname, Question
+    """
+    res = cnx.query(sql)
+    for item in res['data']:
+        if(item['groupname'] == 'basics'):
+            basic['Questions'].append(item['Question'])
+        elif(item['groupname'] == 'world'):
+            world['Questions'].append(item['Question'])
+        elif(item['groupname'] == 'nobel'):
+            nobel['Questions'].append(item['Question'])
+        elif(item['groupname'] == 'SELECTwithin' or item['groupname'] == 'SELECTwithin '):
+            within['Questions'].append(item['Question'])
+        elif(item['groupname'] == 'SUMndCOUNT'):
+            aggregate['Questions'].append(item['Question'])
+        elif(item['groupname'] == 'JOIN'):
+            joins['Questions'].append(item['Question'])
+    
+    response.append(basic)
+    response.append(world) 
+    response.append(nobel)   
+    response.append(within) 
+    response.append(aggregate) 
+    response.append(joins) 
+    return response
+
+    
 @app.post("/teacher")
 async def postteachers(item:teacher):
     sql = f"""
