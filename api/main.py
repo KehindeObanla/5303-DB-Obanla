@@ -70,6 +70,7 @@ async def getallbasic():
         }
         finalresult.append(response)
     return finalresult
+
 @app.get("/basics/{count}")
 async def getonebasic(count:int):
     result = cnx.query(f"SELECT * FROM sqlzoo WHERE groupname ='basics' AND count ={count}")
@@ -85,6 +86,7 @@ async def getonebasic(count:int):
             'sql':sql
         }
         return response
+
 @app.get("/world",name ="world")
 async def getworldall():
     result = cnx.query(f"SELECT * FROM sqlzoo WHERE groupname ='world'") 
@@ -101,6 +103,7 @@ async def getworldall():
         }
         finalresult.append(response)
     return finalresult
+
 @app.get("/world/{count}")
 async def getonworld(count:int):
     result = cnx.query(f"SELECT * FROM sqlzoo WHERE groupname ='world' AND count ={count}")
@@ -116,6 +119,7 @@ async def getonworld(count:int):
             'sql':sql
         }
         return response
+
 @app.get("/nobel",name ="nobel")
 async def getnobelall():
     result = cnx.query(f"SELECT * FROM sqlzoo WHERE groupname ='nobel'") 
@@ -132,6 +136,7 @@ async def getnobelall():
         }
         finalresult.append(response)
     return finalresult
+
 @app.get("/nobel/{count}")
 async def getnobelone(count:int):
     result = cnx.query(f"SELECT * FROM sqlzoo WHERE groupname ='nobel' AND count ={count}")
@@ -147,6 +152,7 @@ async def getnobelone(count:int):
             'sql':sql
         }
         return response
+
 @app.get("/within",name="within")
 async def getwithinall():
     result = cnx.query(f"SELECT * FROM `sqlzoo` WHERE groupname LIKE 'SELECT%'") 
@@ -163,6 +169,7 @@ async def getwithinall():
         }
         finalresult.append(response)
     return finalresult
+
 @app.get("/within/{count}")
 async def getwithinone(count:int):
     result = cnx.query(f"SELECT * FROM sqlzoo WHERE groupname LIKE 'SELECT%' AND count ={count}")
@@ -195,6 +202,7 @@ async def getaggregateall():
         }
         finalresult.append(response)
     return finalresult
+
 @app.get("/aggregate/{count}")
 async def getaggregateone(count:int):
     result = cnx.query(f"SELECT * FROM `sqlzoo` WHERE groupname ='SUMndCOUNT' AND count ={count}")
@@ -210,6 +218,7 @@ async def getaggregateone(count:int):
             'sql':sql
         }
         return response
+
 @app.get("/joins",name ="joins")
 async def getjoinsall():
     result = cnx.query(f"SELECT * FROM `sqlzoo` WHERE groupname ='JOIN'") 
@@ -242,6 +251,7 @@ async def getjoinsone(count:int):
             'sql':sql
         }
         return response
+        
 @app.get("/all")
 async def getall():
     response =[]
@@ -333,7 +343,8 @@ async def patchworld(item:world):
     res = cnx.query(sql)
     return res
     
-
+if __name__ == "__main__":
+  uvicorn.run(app, host="0.0.0.0", port=8001, log_level="info")
 
 
 
