@@ -240,7 +240,7 @@ async def Actorgenre(Actorid:str):
     resulted = cnx.query(sql0)
     if(len(resulted['data'] )!=0):
         actorname = resulted['data'][0]['firstname'] + " " + resulted['data'][0]['Lastname'] 
-        sql =f'SELECT Actors.firstname,Actors.Lastname FROM Actors WHERE Actors.pid IN (SELECT knownForTitles.pid FROM knownForTitles WHERE knownForTitles.mid IN (SELECT knownForTitles.mid FROM knownForTitles WHERE knownForTitles.pid ="{Actorid}")) AND Actors.pid <> "{Actorid}"'
+        sql =f'SELECT Actors.firstname,Actors.Lastname FROM Actors WHERE Actors.pid IN (SELECT knownForTitles.pid FROM knownForTitles WHERE knownForTitles.mid IN (SELECT knownForTitles.mid FROM knownForTitles WHERE knownForTitles.pid ="{Actorid}")) AND Actors.pid <> "{Actorid}" LIMIT 100'
         result = cnx.query(sql)
         response = {
         "Actor":actorname,
@@ -250,6 +250,43 @@ async def Actorgenre(Actorid:str):
     else:
         note = f'Actorid "{Actorid}" Does not exist'
         return note
+@app.get("/Actors/profession/{profession}")
+async def Actorprofession(profession:str):
+    sql0 =f'SELECT `ProfessionID` FROM `Profession` WHERE `Job` LIKE "{profession}"'
+    resulted = cnx.query(sql0)
+    print(len(resulted['data']))
+    toadd = f'<a href= /profession> click for profession list</a>'
+    if(len(resulted['data']) ==0):
+        note =f"{profession} is not in the list of profession.<br> " + toadd
+        return HTMLResponse(content=note, status_code=200)
+    else:
+        sql =f'SELECT Actors.firstname,Actors.Lastname,Profession.Job FROM Actors JOIN ActorProfession ON Actors.pid =ActorProfession.Pid JOIN Profession ON Profession.ProfessionID =ActorProfession.ProfessionID WHERE Profession.Job LIKE "{profession}" LIMIT 100'
+        result = cnx.query(sql)
+        sql2 =f'SELECT Count(Profession.Job) AS count FROM Actors JOIN ActorProfession ON Actors.pid =ActorProfession.Pid JOIN Profession ON Profession.ProfessionID =ActorProfession.ProfessionID WHERE Profession.Job LIKE "{profession}"'
+        resultCount = cnx.query(sql2)
+        value = resultCount['data'][0]['count']
+        counted ='{:,}'.format(value)
+        note =f'Total number of  People in "{profession}"  is "{counted}"'
+        People =[]
+        for pep in result['data']:
+            name = pep['firstname'] +" "+pep['Lastname']
+            People.append(name)
+
+        response ={
+            "count":note,
+            " People":People
+        }
+        return response      
+
+@app.get("/profession")
+async def profession():
+    sql ="SELECT `Job` FROM `Profession`"
+    result = cnx.query(sql)
+    professions =[]
+    for p in result['data']:
+        professions.append(p['Job'])
+    return professions 
+
 
 @app.get("/genre")
 async def genre():
