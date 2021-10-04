@@ -73,6 +73,7 @@ async def getallbasic():
 
 @app.get("/basics/{count}")
 async def getonebasic(count:int):
+    
     result = cnx.query(f"SELECT * FROM sqlzoo WHERE groupname ='basics' AND count ={count}")
     if  len(result['data']) == 0 :
         return result
