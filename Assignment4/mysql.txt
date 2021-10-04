@@ -122,7 +122,7 @@ knowworks = row[5].split(',')
 
 
 
-    //principarls
+    //principas
     sql = 'SELECT `mID` FROM `Movies` WHERE `mID` = "{movie}"'.format(movie=row[0])
                 answer =cnx.query(sql)
                 if(len(answer['data'])>0):
