@@ -217,7 +217,7 @@ async def Actorgenre(genre:str):
     sql0 =f'SELECT * FROM `Genre` WHERE `genre` ="{genre}"'
     result = cnx.query(sql0)
     toadd = f'<a href= /genre> click for genre list</a>'
-    print(len(result['data']))
+    
     if(len(result['data']) ==0):
         note =f"{genre} is not in th elist of genre.<br> " + toadd
         return HTMLResponse(content=note, status_code=200)
@@ -297,4 +297,5 @@ async def genre():
         genre.append(g['genre'])
     
     return genre
-    
+if __name__ == "__main__":
+  uvicorn.run(app, host="0.0.0.0", port=8002, log_level="info")
