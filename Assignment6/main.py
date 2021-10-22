@@ -16,10 +16,7 @@ from turfpy.measurement import points_within_polygon
 
 app = FastAPI()
 # connect to mongodb
-cnx = pymongo.MongoClient('143.244.153.25:27017',
-                     username='Kehinde',
-                      password='ko15026O.',                  
-                      authSource='admin')
+
 # use businessData
 db = cnx["restaurants"]
 # choose collection
