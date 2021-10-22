@@ -19,6 +19,7 @@ app = FastAPI()
 with open('/var/www/html/Database/mongoconfig.json') as f:
     config = json.loads(f.read())
 cnx = pymongo.MongoClient(**config)
+
 # use businessData
 db = cnx["restaurants"]
 # choose collection
