@@ -16,10 +16,9 @@ from turfpy.measurement import points_within_polygon
 
 app = FastAPI()
 # connect to mongodb
-cnx = pymongo.MongoClient('143.244.153.25:27017',
-                     username='Kehinde',
-                      password='ko15026O.',                  
-                      authSource='admin')
+with open('/var/www/html/Database/mongoconfig.json') as f:
+    config = json.loads(f.read())
+cnx = pymongo.MongoClient(**config)
 # use businessData
 db = cnx["restaurants"]
 # choose collection
@@ -116,9 +115,17 @@ async def findAllZip(Zips:list):
 
 @app.get("/location")
 async def findAlllocation(latlong:list):
-    stuff ={"address.coord": {"$near":latlong}, "$maxDistance": 10}
-    res = coll.find(stuff)
-    return res.count()
+    response_rest_list = []
+    res= coll.find({'address.coord':
+                                    {'$near':latlong,
+                                     '$minDistance':10,
+                                     '$maxDistance':100
+                                    }
+                    })
+    for rest in res:
+        response_rest_list.append(Resturant(**rest))
+    return response_rest_list
+
     """  stuff = { "address.coord": latlong}
     qu = coll.find(stuff)
     broug = qu[0]['borough']
