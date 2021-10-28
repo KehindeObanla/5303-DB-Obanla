@@ -58,6 +58,55 @@ class filter(BaseModel):
         Bldg:  Optional[str] = None
         Room: Optional[str] = None
 
+class Addcourse(BaseModel):
+    Col:  str
+    Crn: str
+    Subj: str 
+    Crse: str 
+    Sect:  str
+    Title: str
+    PrimaryInstructor:  str
+    Max: Optional[int] = None
+    Curr: Optional[int] = None
+    Aval:  Optional[int] = None
+    Days:  Optional[str] = None
+    Begin: Optional[str] = None
+    End: Optional[str] = None
+    Bldg:  Optional[str] = None
+    Room: Optional[str] = None
+    year:Optional[str] = None
+    Season:Optional[str] = None
+
+class Addstudent(BaseModel):
+    FirstName:str
+    LastName:str
+    Mnumber:str
+    Classification: Optional[str] = None
+    Email: Optional[str] = None
+    Gpa:Optional[float] = -1
+    GithubUname:Optional[str] = None
+class patchstudent(BaseModel):
+    FirstName:Optional[str] = None
+    LastName:Optional[str] = None
+    Mnumber:str
+    Classification: Optional[str] = None
+    Email: Optional[str] = None
+    Gpa:Optional[float] = -1
+    GithubUname:Optional[str] = None
+class AddAdvisingF(BaseModel):
+    StudentID:str
+    Semester:str
+    Year:str
+    ListofCourses:str
+    DateCreated:str
+
+class PatchAdvising(BaseModel):
+    StudentID:str
+    Semester:Optional[str]
+    Year:Optional[int]
+    ListofCourses:Optional[str]
+    DateCreated:Optional[str]
+
 class AdvisingForms(BaseModel):
     StudentID:Optional[str] = None
     Semester:Optional[str] = None
@@ -340,3 +389,76 @@ async def filterAdvisform(Advisform:AdvisingForms):
         return 'Invalid Advising filters'
     else:
         return formatResult(res)
+
+@app.post("/AddStudent")
+async def student(sqlList:Addstudent):
+    fname = str(sqlList.FirstName)
+    lname = str(sqlList.LastName)
+    Mnum= str(sqlList.Mnumber)
+    classfi = str(sqlList.Classification)
+    Email= str(sqlList.Email)
+    GPA= int(sqlList.Gpa)
+    gitname= str(sqlList.GithubUname)
+    sql ='INSERT INTO `StudentIInfo` (`FirstName`, `LastName`, `Mnumber`, `Classification`, `Email`, `GPA`, `GitHubUname`) VALUES ("{fnam}", "{lnam}", "{Mnu}", "{classf}", "{email}", {gpa}, "{gituname}")'.format(fnam=fname,lnam =lname ,Mnu = Mnum , classf =classfi if 'None' not in classfi else " ",email= Email if 'None' not in Email else " ",gpa= GPA,gituname = gitname if 'None' not in gitname else " ")
+    cnx.query(sql)
+
+
+@app.patch("/UpdateStudent")
+async def student(sqlList:patchstudent):
+    response ={}
+    sql ="UPDATE `StudentIInfo` SET"
+    if(sqlList.FirstName!=None):
+        response['FirstName'] = sqlList.FirstName
+    if(sqlList.LastName!=None):
+        response['LastName'] = sqlList.LastName
+    if(sqlList.Classification!=None):
+        response['Classification'] = sqlList.Classification
+    if(sqlList.Email!=None):
+        response['Email'] = sqlList.Email
+    if(sqlList.Gpa!=-1):
+        response['Gpa'] = sqlList.Gpa
+    if(sqlList.GithubUname!=None):
+        response['GithubUname'] = sqlList.GithubUname
+    sql = sql+" "
+    for x,y in response.items():
+        sql = sql + '`' + x +'`'  + " " + "="+ " "+ "'" +str(y) +"'"  + ","
+    sql =sql[:-1]
+    sql = sql + " WHERE `StudentIInfo`.`Mnumber` = "
+    sql = sql + "'"+str(sqlList.Mnumber)+"'"
+    sql = sql + ";"
+    res =cnx.query(sql)
+    return res
+
+
+@app.patch("/UpdateAdvisingForm")
+async def AdvisingformPatch(sqlList:PatchAdvising):
+    response ={}
+    sql ="UPDATE `Advisingform` SET"
+    if(sqlList.Semester!=None):
+        response['Semester'] = sqlList.Semester
+    if(sqlList.Year!=None):
+        response['Year'] = sqlList.Year
+    if(sqlList.ListofCourses!=None):
+        response['ListofCourses'] = sqlList.ListofCourses
+    if(sqlList.DateCreated!=None):
+        response['DateCreated'] = sqlList.DateCreated
+    sql = sql+" "
+    for x,y in response.items():
+        sql = sql + '`' + x +'`'  + " " + "="+ " "+ "'" +str(y) +"'"  + ","
+    sql =sql[:-1]
+    sql = sql + " WHERE `Advisingform`.`StudentID` = "
+    sql = sql + "'"+str(sqlList.StudentID)+"'"
+    sql = sql + ";"
+    res =cnx.query(sql)
+    return res
+
+@app.post("/AddForm")
+async def student(sqlList:AddAdvisingF):
+    semester = str(sqlList.Semester)
+    year = int(sqlList.Year)
+    Mnum= str(sqlList.StudentID)
+    Courses = str(sqlList.ListofCourses)
+    Created= str(sqlList.DateCreated)
+    sql ='INSERT INTO `Advisingform` (`Semester`, `Year`, `StudentID`, `ListofCourses`, `DateCreated`) VALUES ("{Semester}", "{Year}", "{StudentID}", "{ListofCourses}", "{DateCreated}")'.format(Semester=semester ,Year =year ,StudentID = Mnum , ListofCourses =Courses ,DateCreated= Created )
+    res =cnx.query(sql)
+    return res
