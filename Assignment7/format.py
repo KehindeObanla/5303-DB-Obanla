@@ -41,7 +41,11 @@ with open('/var/www/html/Database/.config.json') as f:
     config = json.loads(f.read())
 
 cnx = MysqlCnx(**config)
-coursedic = {
+col = set()
+sql = "SELECT `Col` FROM `CourseInfo`"
+res = cnx.query(sql)
+
+""" coursedic = {
         "Col": "",
         "Crn": "",
         "Subj": "",
@@ -120,7 +124,7 @@ print(len(data))
 print(len(test))
 print(count)
 print(count)    
-
+ """
    
 
 
