@@ -11,11 +11,12 @@ from datetime import datetime
 
 
 #helper function
+# 24 -12
 def Timetwelve(converted):
     in_time = datetime.strptime(converted, "%H:%M:%S")
     out_time = datetime.strftime(in_time, "%I:%M:%p" )
     return out_time
-
+#12-24
 def Timetwenty(converted):
     in_time = datetime.strptime(converted, "%I:%M%p")
     out_time = datetime.strftime(in_time, "%H:%M")
@@ -66,9 +67,27 @@ class Addcourse(BaseModel):
     Sect:  str
     Title: str
     PrimaryInstructor:  str
-    Max: Optional[int] = None
-    Curr: Optional[int] = None
-    Aval:  Optional[int] = None
+    Max: Optional[int] = -1
+    Curr: Optional[int] = -1
+    Aval:  Optional[int] = -1
+    Days:  Optional[str] = None
+    Begin: Optional[str] = None
+    End: Optional[str] = None
+    Bldg:  Optional[str] = None
+    Room: Optional[str] = None
+    year:int
+    Season:str
+class patchcourse(BaseModel):
+    Col:  Optional[str] = None
+    Crn: str
+    Subj: Optional[str] = None 
+    Crse: Optional[str] = None
+    Sect:  Optional[str] = None
+    Title: Optional[str] = None
+    PrimaryInstructor:  Optional[str] = None
+    Max: Optional[int] = -1
+    Curr: Optional[int] = -1
+    Aval:  Optional[int] = -1
     Days:  Optional[str] = None
     Begin: Optional[str] = None
     End: Optional[str] = None
@@ -230,8 +249,7 @@ async def ClassTyme(buldroom:str):
 
 @app.post("/Annony")
 async def filterall(sqlList:filter):
-    sql ="SELECT * FROM `CourseInfo` WHERE year = 2022"
-    
+    sql ="SELECT * FROM `CourseInfo` WHERE year = 2022" 
     response ={}
     if(sqlList.Col!=None):
         response['Col'] = sqlList.Col
@@ -461,4 +479,74 @@ async def student(sqlList:AddAdvisingF):
     Created= str(sqlList.DateCreated)
     sql ='INSERT INTO `Advisingform` (`Semester`, `Year`, `StudentID`, `ListofCourses`, `DateCreated`) VALUES ("{Semester}", "{Year}", "{StudentID}", "{ListofCourses}", "{DateCreated}")'.format(Semester=semester ,Year =year ,StudentID = Mnum , ListofCourses =Courses ,DateCreated= Created )
     res =cnx.query(sql)
+    return res
+
+@app.post("/Addcourse")
+async def Addcourses(sqlList:Addcourse):
+    col = str(sqlList.Col)
+    crn = str(sqlList.Crn)
+    subj = str(sqlList.Subj)
+    crse = str(sqlList.Crse)
+    sect = str(sqlList.Sect)
+    title = str(sqlList.Title)
+    PI = str(sqlList.PrimaryInstructor)
+    maxn = int(sqlList.Max)
+    curr = int(sqlList.Curr)
+    aval = str(sqlList.Aval)
+    begin = str(sqlList.Begin)
+    end = str(sqlList.End)
+    days = str(sqlList.Days)
+    if 'None' not in end:
+        end = Timetwenty(end)
+    if 'None' not in begin:
+        begin = Timetwenty(begin)
+    bldg = str(sqlList.Bldg)
+    room = str(sqlList.Room)
+    Year = int(sqlList.year)
+    season = str(sqlList.Season)
+    sql ='INSERT INTO `CourseInfo`(`Col`, `Crn`, `Subj`, `Crse`, `Sect`, `Title`, `PrimaryInstructor`, `Max`, `Curr`, `Aval`, `Days`, `Begin`, `End`, `Bldg`, `Room`, `year`, `Season`) VALUES ("{Col}","{Crn}","{Subj}","{Crse}","{Sect}","{Title}","{PrimaryInstructor}","{Max}","{Curr}","{Aval}","{Days}","{Begin}","{End}","{Bldg}","{Room}","{year}","{Season}")'.format(Col=col,Crn=crn,Subj=subj,Crse=crse,Sect=sect,Title=title,PrimaryInstructor=PI,Max=maxn,Curr=curr,Aval=aval,Days=days if 'None' not in days else " ",Begin=begin if 'None' not in begin else " ",End=end if 'None' not in end else " ",Bldg = bldg if 'None' not in bldg else " ", Room=room  if 'None' not in room else " ",year=Year,Season=season)
+    res =cnx.query(sql)
+    return res
+
+@app.patch("/Updatecourse")
+async def AdvisingformPatch(sqlList:patchcourse):
+    sql ="UPDATE `CourseInfo` SET"
+    response ={}
+    if(sqlList.Col!=None):
+        response['Col'] = sqlList.Col
+    if(sqlList.Subj!=None):
+        response['Subj'] = sqlList.Subj
+    if(sqlList.Crse!=None):
+        response['Crse'] = sqlList.Crse
+    if(sqlList.Sect!=None):
+        response['Sect'] = sqlList.Sect
+    if(sqlList.Title!=None):
+        response['Title'] = sqlList.Title
+    if(sqlList.PrimaryInstructor!=None):
+        response['PrimaryInstructor'] = sqlList.PrimaryInstructor
+    if(sqlList.Max!=None):
+        response['Max'] = sqlList.Max
+    if(sqlList.Curr!=None):
+        response['Curr'] = sqlList.Curr
+    if(sqlList.Aval!=None):
+        response['Aval'] = sqlList.Aval
+    if(sqlList.Days!=None):
+        response['Days'] = sqlList.Days
+    if(sqlList.Begin!=None):
+        response['Begin'] = Timetwenty(str(sqlList.Begin))
+    if(sqlList.End!=None):
+        response['End'] = Timetwenty(str(sqlList.End))
+    if(sqlList.Bldg!=None):
+        response['Bldg'] = sqlList.Bldg
+    if(sqlList.Room!=None):
+        response['Room'] = sqlList.Room
+    sql = sql+" "
+    for x,y in response.items():
+        sql = sql + '`' + x +'`'  + " " + "="+ " "+ "'" +str(y) +"'"  + ","
+    sql =sql[:-1]
+    sql = sql + " WHERE `CourseInfo`.`Crn` = "
+    sql = sql + "'"+str(sqlList.Crn)+"'"
+    sql = sql + ";"
+    print(sql)
+    res = cnx.query(sql)
     return res
