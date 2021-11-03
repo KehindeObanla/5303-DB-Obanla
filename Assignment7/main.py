@@ -247,7 +247,7 @@ async def ClassTyme(buldroom:str):
         else:
             return formatResult(res)
 
-@app.post("/Annony")
+@app.get("/Annony")
 async def filterall(sqlList:filter):
     sql ="SELECT * FROM `CourseInfo` WHERE year = 2022" 
     response ={}
@@ -378,7 +378,7 @@ async def AdvisingStudentyear (Semester:str):
     else:
         return formatResult(res)
 
-@app.post("/Advising/All")
+@app.get("/Advising/All")
 async def filterAdvisform(Advisform:AdvisingForms):
     count =0
     response ={}
