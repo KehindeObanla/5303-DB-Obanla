@@ -106,7 +106,7 @@ class patchcourse(BaseModel):
     Room: Optional[str] = None
     year:Optional[str] = None
     Season:Optional[str] = None
-""" select """
+""" select/insert """
 class Addstudent(BaseModel):
     FirstName:str
     LastName:str
@@ -444,7 +444,8 @@ async def student(sqlList:Addstudent):
     GPA= int(sqlList.Gpa)
     gitname= str(sqlList.GithubUname)
     sql ='INSERT INTO `StudentIInfo` (`FirstName`, `LastName`, `Mnumber`, `Classification`, `Email`, `GPA`, `GitHubUname`) VALUES ("{fnam}", "{lnam}", "{Mnu}", "{classf}", "{email}", {gpa}, "{gituname}")'.format(fnam=fname,lnam =lname ,Mnu = Mnum , classf =classfi if 'None' not in classfi else " ",email= Email if 'None' not in Email else " ",gpa= GPA,gituname = gitname if 'None' not in gitname else " ")
-    cnx.query(sql)
+    res = cnx.query(sql)
+    return res
 
 
 @app.patch("/UpdateStudent")
