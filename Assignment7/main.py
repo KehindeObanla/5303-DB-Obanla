@@ -68,6 +68,8 @@ class filter(BaseModel):
         End: Optional[str] = None
         Bldg:  Optional[str] = None
         Room: Optional[str] = None
+        year: Optional[str] = None
+        Season:Optional[str] = None
 """ insert """
 class Addcourse(BaseModel):
     Col:  str
@@ -153,8 +155,20 @@ class AdvisingForms(BaseModel):
     Year:Optional[str] = None
     Classification: Optional[str] = None
     Major: Optional[str] = None
+    FirstName: Optional[str] = None
+    LastName: Optional[str] = None
+    Classification: Optional[str] = None
+    Major: Optional[str] = None
 
-
+""" select/insert """
+class filterStudent(BaseModel):
+    FirstName:Optional[str] = None
+    LastName:Optional[str] = None
+    Mnumber:Optional[str] = None
+    Classification: Optional[str] = None
+    Email: Optional[str] = None
+    Gpa:Optional[float] = -1
+    GithubUname:Optional[str] = None
 """ Api """
 
 
@@ -271,7 +285,7 @@ async def ClassTyme(buldroom:str):
 
 @app.get("/Annony")
 async def filterall(sqlList:filter):
-    sql ="SELECT * FROM `CourseInfo` WHERE year = 2022" 
+    sql ="SELECT * FROM `CourseInfo` WHERE" 
     response ={}
     if(sqlList.Col!=None):
         response['Col'] = sqlList.Col
@@ -303,12 +317,26 @@ async def filterall(sqlList:filter):
         response['Bldg'] = sqlList.Bldg
     if(sqlList.Room!=None):
         response['Room'] = sqlList.Room
+    if(sqlList.year!=None):
+        response['year'] = sqlList.year
+    if(sqlList.Season!=None):
+        response['Season'] = sqlList.Season
     sql = sql+" "
-    for x,y in response.items():
-        addand = 'AND'
-        sql = sql + addand + " " + '`' + x +'`'  + " " + "="+ " "+ "'" +str(y) +"'"  
+    if(len(response)>1):
+        for x,y in response.items():
+            sql = sql + " " + '`' + x +'`'  + " " + "="+ " "+ "'" +str(y) +"'"  
+            del response[x]
+            break
+        for x,y in response.items():
+            addand = 'AND'
+            sql = sql + addand + " " + '`' + x +'`'  + " " + "="+ " "+ "'" +str(y) +"'"      
+    else:
+        for x,y in response.items():
+            sql = sql + " " + '`' + x +'`'  + " " + "="+ " "+ "'" +str(y) +"'"  
     sql = sql + ";"
+    print(sql)
     res = cnx.query(sql)
+    result = res['data']
     result = res['data']
     if(len(result) ==0):
         return 'no available class'
@@ -415,6 +443,11 @@ async def filterAdvisform(Advisform:AdvisingForms):
         response['Classification'] = Advisform.Classification
     if(Advisform.Major!=None):
         response['Major'] = Advisform.Classification
+    if(Advisform.FirstName!=None):
+        response['FirstName'] = Advisform.FirstName
+    if(Advisform.LastName!=None):
+        response['LastName'] = Advisform.LastName
+    sql = sql+" "
     if(len(response)>1):
         for x,y in response.items():
             sql = sql + " " + '`' + x +'`'  + " " + "="+ " "+ "'" +str(y) +"'"  
@@ -631,3 +664,42 @@ async def MakeAdvisingform(sqlList:list):
         test+='</div>'
         test+= "<div style ='text-decoration: underline'>"+'Total hours'+" " +str(hours) +'<div>'
     return test
+
+
+@app.get("/filterstudent")
+async def filterstudent(sqlList:filterStudent):
+    response ={}
+    sql ="SELECT * FROM `StudentIInfo` WHERE"
+    if(sqlList.FirstName!=None):
+        response['FirstName'] = sqlList.FirstName
+    if(sqlList.LastName!=None):
+        response['LastName'] = sqlList.LastName
+    if(sqlList.Classification!=None):
+        response['Classification'] = sqlList.Classification
+    if(sqlList.Email!=None):
+        response['Email'] = sqlList.Email
+    if(sqlList.Gpa!=-1):
+        response['Gpa'] = sqlList.Gpa
+    if(sqlList.GithubUname!=None):
+        response['GithubUname'] = sqlList.GithubUname
+    if(sqlList.Mnumber!=None):
+        response['Mnumber'] = sqlList.Mnumber
+    sql = sql+" "
+    if(len(response)>1):
+        for x,y in response.items():
+            sql = sql + " " + '`' + x +'`'  + " " + "="+ " "+ "'" +str(y) +"'"  
+            del response[x]
+            break
+        for x,y in response.items():
+            addand = 'AND'
+            sql = sql + addand + " " + '`' + x +'`'  + " " + "="+ " "+ "'" +str(y) +"'"      
+    else:
+        for x,y in response.items():
+            sql = sql + " " + '`' + x +'`'  + " " + "="+ " "+ "'" +str(y) +"'"  
+    sql = sql + ";"
+    res = cnx.query(sql)
+    result = res['data']
+    if(len(result) ==0):
+        return 'Invalid student filters'
+    else:
+        return formatResult(res)

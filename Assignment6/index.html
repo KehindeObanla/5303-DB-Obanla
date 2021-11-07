@@ -4,99 +4,57 @@
 
 	</head>
 	<body>
+    <h1> Midwestern State University Advising Form</h1><br><br>
+    <div>
+      <button @click="$router.push('mainpage')">Home</button>
+      <button @click="$router.push('EditAdvising')">Edit Advising forms</button>
+    </div>
+    <br><br>
 		<div>
-			<input type="text" placeholder="Filter by Major" autocomplete="off" />
-		   <br />
-		   <datalist >
-			  
-<option value ="Accounting, B.B.A."> Accounting, B.B.A.</option>
-<option value ="Applied Arts and Sciences, B.A.A.S"> Applied Arts and Sciences, B.A.A.S.</option>
-<option value ="Art B.F.A"> Art B.F.A. with Teacher Certification</option>
-<option value ="Art, B.A"> Art, B.A.</option>
-<option value ="Art, B.F.A.">  Art, B.F.A.</option>
-<option value ="Athletic Training, B.S.A.T.">  Athletic Training, B.S.A.T.</option>
-<option value ="Bilingual Generalist and General Education"> Bilingual Generalist and General Education EC-6, B.S.I.S. (Spanish)</option>
-<option value ="Biology, B.S."> Biology, B.S.</option>
-<option value ="Biology-Life Science, B.S.">  Biology-Life Science, B.S. with Secondary Certification (Grades 7-12)</option>
-<option value ="Chemistry, B.S.">  Chemistry, B.S.</option>
-<option value ="Composite Science, B.S."> Composite Science, B.S. with Secondary Certification (Grades 7-12)</option>
-<option value ="Computer Science, B.A."> Computer Science, B.A.</option>
-<option value ="Computer Science, B.S.">Computer Science, B.S.</option>
-<option value ="Criminal Justice, B.S.C.J.">  Criminal Justice, B.S.C.J.</option>
-<option value ="Dental Early Admissions">Dental Early Admissions Program </option>
-<option value ="Dental Hygiene"> Dental Hygiene, B.S.D.H.</option>
-<option value ="Early Childhood">Early Childhood Through Grade 6 (EC-6), B.S.I.S.</option>
-<option value ="Economics"> Economics, B.B.A.</option>
-<option value ="English, B.A."> English, B.A.</option>
-<option value ="Exercise Physiology "> Exercise Physiology, B.S.E.P.</option>
-<option value ="Finance"> Finance, B.B.A.</option>
-<option value ="French ">French, Field of Concentration</option>
-<option value ="General Business"> General Business, B.B.A.</option>
-<option value ="Geosciences">  Geosciences, B.S.</option>
-<option value ="Global Studies">  Global Studies, B.A.</option>
-<option value ="Humanities" >Humanities, B.A.</option>
-<option value ="Kinesiology"> Kinesiology  B.A. </option>
-<option value ="Kinesiology"> Kinesiology  B.S.</option>
-<option value ="Management Information Systems"> Management Information Systems, B.B.A.</option>
-<option value ="Management" > Management, B.B.A.</option>
-<option value ="Marketing">Marketing, B.B.A.</option>
-<option value ="Mass Communication"> Mass Communication, B.A.</option>
-<option value ="Mathematics">  Mathematics (4-8 Certificate), B.S.I.S.</option>
-<option value ="Mathematics"> Mathematics, B.A.</option>
-<option value ="Mathematics">Mathematics, B.S.</option>
-<option value ="Mathematics"> Mathematics, B.S. with Secondary Certification (Grades 7-12)</option>
-<option value ="Mechanical Engineering">  Mechanical Engineering, B.S.M.E.</option>
-<option value ="Music">  Music Instrumental Emphasis, B.M. </option>
-<option value ="Music"> Music Vocal Emphasis, B.M. </option>
-<option value ="Music">  Music, B.A.</option>
-<option value ="Music">  Music, B.M.</option>
-<option value ="Nursing">  Nursing - Accelerated Second Bachelor’s B.S.N. (Pre-licensure)</option>
-<option value ="Nursing">  Nursing - RN Transition Program, B.S.N. (Post-licensure)</option>
-<option value ="Nursing">  Nursing, B.S.N. (Pre-licensure)</option>
-<option value ="Physics">  Physics, B.S.</option>
-<option value ="Political Science">  Political Science, B.A.</option>
-<option value ="Psychology">  Psychology, B.A.</option>
-<option value ="Psychology">  Psychology, B.S.</option>
-<option value ="Radiologic Sciences">  Radiologic Sciences, B.S.R.S.</option>
-<option value ="Radiologic Technology">  Radiologic Technology, B.S.R.T.</option>
-<option value ="Respiratory Therapist">  Registered Respiratory Therapist-to-BSRC Program</option>
-<option value ="Respiratory Care">  Respiratory Care, B.S.R.C.</option>
-<option value ="Social Studies">  Social Studies (4-8 Certificate), B.S.I.S.</option>
-<option value ="Social Work">  Social Work, B.S.W.</option>
-<option value ="Sociology">  Sociology, B.A.</option>
-<option value ="Sociology">  Sociology, B.S.</option>
-<option value ="Spanish">  Spanish (Grades EC-12, All-Level), B.A. with Teacher Certification</option>
-<option value ="Spanish">  Spanish, B.A.</option>
-<option value ="Special Education Early Childhood">  Special Education Early Childhood B.S.I.S.</option>
-<option value ="Sport and Leisure Studies">  Sport and Leisure Studies, B.A.</option>
-<option value ="Sport and Leisure Studies"> Sport and Leisure Studies, B.S.</option>
-<option value ="Theatre"> Theatre B.F.A. Teacher Certification</option>
-<option value ="Theatre"> Theatre, B.F.A.</option>
-
-	</datalist>
-		</div>
-		<script>
-			(function() {
-  const select = document.querySelectorAll('select');
-  const options = Array.from(select[0].options);
-  const input = document.querySelector('input');
-  function findMatches (search, options) {
-    return options.filter(option => {
-      const regex = new RegExp(search, 'gi');
-      return option.text.match(regex);
-    });
-  }
-  function filterOptions () {
-    options.forEach(option => { 
-      option.remove();
-      option.selected = false;
-    });
-    const matchArray = findMatches(this.value, options);
-    select[0].append(...matchArray);
-  }
-  input.addEventListener('change', filterOptions);
-  input.addEventListener('keyup', filterOptions);
-})();
-		</script>	
+      <form>
+        Semester<select name="Semester" id="Semester"  v-model="tosend.Semester">
+          <option value="Fall">Fall</option>
+          <option value="Spring">Spring</option>
+          <option value="Summer1">Summer1</option>
+          <option value="Summer2">Summer2</option>
+        </select>&ensp;&ensp;&ensp; 
+        Year<select name="year" id="year"  v-model="tosend.Year">
+          <option value="2022">2022</option>
+          <option value="2021">2021</option>
+        </select>&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;
+        
+        Date<input type="date" id="DateCreated"name="DateCreated" /> &ensp;&ensp;&ensp;&ensp;&ensp;
+  
+        FirstName<input type="text" id="Fname" name="Fname" v-model="tosend.FirstName" />&ensp;&ensp;&ensp;&ensp;&ensp;
+  
+        LastName<input type="text" id="Lname" name="Lname" v-model="tosend.LastName"/><br><br>
+  
+        Mnumber<input type="text" id="StudentID" name="StudentID" v-model="tosend.StudentID"/>&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp; 
+        Major<select name="year" id="year"  v-model="tosend.Year">
+        <option value=" "></option>
+        <option value="2021">2021</option>
+        <option value="2022">2022</option>
+        </select>&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp; 
+  
+         Classification <select name="Classification" id="Classification" v-model="tosend.Classification" >
+          <option value=""></option>
+          <option value="Freshman">Freshman</option>
+          <option value="Sophomore">Sophomore</option>
+          <option value="junior">junior</option>
+          <option value="Senior">Senior</option>
+        </select>&ensp;&ensp;&ensp;&ensp;&ensp;
+        Display <select name="Display" id="Display" v-model="tosend.Display" >
+          <option value="25"> 25</option>
+          <option value="50">50</option>
+          <option value="100">100</option>
+        </select>&ensp;&ensp;&ensp;&ensp;&ensp;
+       
+      </div>
+      <br>
+      <div class="submit">
+        <button>GO</button>
+      </div>
+      </form>
+      
 	</body>
 </html>

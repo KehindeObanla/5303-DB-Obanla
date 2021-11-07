@@ -9,7 +9,7 @@
       <label for="Fname">FirstName:</label><br />
       <input type="text" id="Fname" name="Fname" v-model="tosend.FirstName" />
 
-      <label for="Fname">LastName:</label><br />
+      <label for="Lname">LastName:</label><br />
       <input
         type="text"
         id="Lname"
@@ -202,7 +202,7 @@ export default {
 };
 </script>
 
-<style >
+<style scoped >
 form {
   max-width: 650px;
   margin: 30px auto;
