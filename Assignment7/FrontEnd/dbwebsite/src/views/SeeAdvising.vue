@@ -66,23 +66,56 @@
     <button>GO</button>
   </div>
     </form>
- 
+ <div ref="tableadd" id ="tableadd" >
+   <table v-show="hasArrived">
+    <tr>
+    <th>Semester</th>
+    <th>Year</th>
+    <th>StudentID</th>
+    <th>ListofCourses</th>
+    <th>Date Created </th>
+    <th>FirstName</th>
+    <th>LastName</th>
+    <th>Classification</th>
+    <th>Major</th>
+  </tr>
+    <tr v-for="item in tableStuff" v-show ="hasTable"> 
+      <th>{{item.Semester}}</th>
+      <th>{{item.Year}}</th>
+      <th>{{item.StudentID}}</th>
+      <th>{{item.ListofCourses}}</th>
+      <th>{{item.DateCreated}}</th>
+      <th>{{item.FirstName}}</th>
+      <th>{{item.LastName}}</th>
+      <th>{{item.Classification}}</th>
+      <th>{{item.Major}}</th>
+    </tr>
+   </table>
+  </div>
+<div id="divCheckbox"  v-show="hasArrived">
+  <button @click="tosend.Offset =tosend.Display"  >next </button>
+  <button @click="tosend.Offset-=tosend.Display" v-if="tosend.Offset>=tosend.Display">back </button>
+</div>
+
 </template>
 
 <script>
+import axios from "axios";
 export default {
   data() {
     return {
       tosend: {
-        Semester: "Fall",
-        Year:2022,
-        StudentID: "",
-        DateCreated: "",
-        Classification: "",
-        Major: "",
-        FirstName: "",
-        LastName: "",
+        Semester:"Fall",
+        Year:"2022",
+        StudentID:"",
+        DateCreated:"",
+        Classification:"",
+        Major:"",
+        FirstName:"",
+        LastName:"",
         Display:25,
+        Offset:0,
+        ListofCourses:""
       },
       Majors: [
         "Accounting, B.B.A.",
@@ -149,12 +182,70 @@ export default {
         "Theatre B.F.A. Teacher Certification",
         "Theatre, B.F.A.",
       ],
+      Addthis:"",
+      hasArrived:false,
+      tableStuff: [],
+      countTable :0,
+      hasTable:false
     };
   },
   methods:{
     Seeform(){
-      console.log("see")
+      var otherdic = {}
+      for (var things in this.tosend){
+         if(this.tosend[things] != "")
+         {
+           otherdic[things] = this.tosend[things]
+         }
+      }
+      console.log(JSON.stringify(otherdic))
+      axios
+        .post("http://143.244.153.25:8004/Advising/All",JSON.stringify(otherdic), {
+          headers: { "Content-Type": "application/json" },
+        })
+        .then((res) => {
+          //Perform Success Action
+          // JSON responses are automatically parsed.
+
+          //this.Addthis = res.data;
+          //this.$refs.tableadd.innerHTML = this.Addthis;
+          if(res.data !="Invalid Advising filters")
+          {
+              this.countTable = this.tableStuff.length
+              this.tableStuff = res.data
+              this.hasArrived = true
+              this.hasTable =true
+          }
+          else{
+              this.hasArrived = true
+              this.hasTable = false
+          }
+          
+          
+        })
+        .catch((error) => {
+          // error.response.status Check status code
+          console.log(error);
+        })
+        .finally(() => {
+          //Perform action in always
+          
+        });
     }
+  },
+  watch:{
+'tosend.Display':function(val){
+   console.log(val)
+   this.tosend.Display =val
+  console.log(this.tosend.Display)
+   this.Seeform()
+},
+'tosend.Offset':function(val){
+  console.log(val)
+  this.tosend.Offset =val
+  console.log(this.tosend.Offset)
+  this.Seeform()
+}
   }
 
 };
@@ -169,7 +260,19 @@ button {
   color: white;
   border-radius: 20px;
 }
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
 
+th, td {
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #48a7a7;
+}
 .error {
   color: #ff0062;
   margin-top: 10px;

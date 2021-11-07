@@ -1,60 +1,90 @@
-
-<html>
-	<head>
-
-	</head>
-	<body>
-    <h1> Midwestern State University Advising Form</h1><br><br>
-    <div>
-      <button @click="$router.push('mainpage')">Home</button>
-      <button @click="$router.push('EditAdvising')">Edit Advising forms</button>
-    </div>
-    <br><br>
-		<div>
-      <form>
-        Semester<select name="Semester" id="Semester"  v-model="tosend.Semester">
-          <option value="Fall">Fall</option>
-          <option value="Spring">Spring</option>
-          <option value="Summer1">Summer1</option>
-          <option value="Summer2">Summer2</option>
-        </select>&ensp;&ensp;&ensp; 
-        Year<select name="year" id="year"  v-model="tosend.Year">
-          <option value="2022">2022</option>
-          <option value="2021">2021</option>
-        </select>&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;
-        
-        Date<input type="date" id="DateCreated"name="DateCreated" /> &ensp;&ensp;&ensp;&ensp;&ensp;
-  
-        FirstName<input type="text" id="Fname" name="Fname" v-model="tosend.FirstName" />&ensp;&ensp;&ensp;&ensp;&ensp;
-  
-        LastName<input type="text" id="Lname" name="Lname" v-model="tosend.LastName"/><br><br>
-  
-        Mnumber<input type="text" id="StudentID" name="StudentID" v-model="tosend.StudentID"/>&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp; 
-        Major<select name="year" id="year"  v-model="tosend.Year">
-        <option value=" "></option>
-        <option value="2021">2021</option>
-        <option value="2022">2022</option>
-        </select>&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp; 
-  
-         Classification <select name="Classification" id="Classification" v-model="tosend.Classification" >
-          <option value=""></option>
-          <option value="Freshman">Freshman</option>
-          <option value="Sophomore">Sophomore</option>
-          <option value="junior">junior</option>
-          <option value="Senior">Senior</option>
-        </select>&ensp;&ensp;&ensp;&ensp;&ensp;
-        Display <select name="Display" id="Display" v-model="tosend.Display" >
-          <option value="25"> 25</option>
-          <option value="50">50</option>
-          <option value="100">100</option>
-        </select>&ensp;&ensp;&ensp;&ensp;&ensp;
-       
-      </div>
-      <br>
-      <div class="submit">
-        <button>GO</button>
-      </div>
-      </form>
-      
-	</body>
-</html>
+<table style="border-spacing:2em; width:100%; border-collapse: collapse;">
+	<tr>
+		<th>Semester</th>
+		<th>Year</th>
+		<th>StudentID</th>
+		<th>ListofCourses</th>
+		<th>Date Created </th>
+		<th>FirstName</th>
+		<th>LastName</th>
+		<th>Classification</th>
+		<th>Major</th>
+	</tr>
+	<tr>
+		<td>Summer1</td>
+		<td>2022</td>
+		<td>Mitsyou</td>
+		<td>30775,30745,30743</td>
+		<td>2021-11-06</td>
+		<td>tome</td>
+		<td>Wheniclose</td>
+		<td>Sophomore</td>
+		<td>Computer science</td>
+	</tr>
+	<tr>
+		<td>Summer1</td>
+		<td>2022</td>
+		<td>Msomuch</td>
+		<td>30775,30745,30743</td>
+		<td>2021-11-06</td>
+		<td>bebe</td>
+		<td>rehxa</td>
+		<td>junior</td>
+		<td>Fame</td>
+	</tr>
+	<tr>
+		<td>Summer1</td>
+		<td>2022</td>
+		<td>rthwretgh</td>
+		<td>30775,30745,30743</td>
+		<td>2021-11-06</td>
+		<td>rthreh</td>
+		<td>herh</td>
+		<td>Sophomore</td>
+		<td>therhgre</td>
+	</tr>
+	<tr>
+		<td>Summer1</td>
+		<td>2022</td>
+		<td>uyoli8oeu45y</td>
+		<td>h5y54yu5u</td>
+		<td>2021-11-06</td>
+		<td>trhtrh</td>
+		<td>rthtrjhju7yui</td>
+		<td>junior</td>
+		<td>trhrthtr</td>
+	</tr>
+	<tr>
+		<td>Summer1</td>
+		<td>2022</td>
+		<td>Wmoyewgfuyhe8</td>
+		<td>30775,30745,30743</td>
+		<td>2021-11-06</td>
+		<td>Help</td>
+		<td>Was</td>
+		<td>Senior</td>
+		<td>Music</td>
+	</tr>
+	<tr>
+		<td>Summer1</td>
+		<td>2022</td>
+		<td>ytjdtyj</td>
+		<td>30775,30745,30743</td>
+		<td>2021-11-06</td>
+		<td>tdyjtyj</td>
+		<td>tydjdj</td>
+		<td>junior</td>
+		<td>dyjytjy</td>
+	</tr>
+	<tr>
+		<td>Summer1</td>
+		<td>2022</td>
+		<td>yukuykuk</td>
+		<td>30775,30745,30743</td>
+		<td>2021-11-06</td>
+		<td>yukuykf</td>
+		<td>kfykyuk</td>
+		<td>junior</td>
+		<td>uykfyuk</td>
+	</tr>
+</table>

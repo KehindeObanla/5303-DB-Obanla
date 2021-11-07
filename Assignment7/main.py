@@ -47,6 +47,8 @@ def formatResult(res):
             response.append(courses)
         return response
 
+
+
 class Time(BaseModel):
     Begin:str
     End: Optional[str] = None
@@ -157,9 +159,10 @@ class AdvisingForms(BaseModel):
     Major: Optional[str] = None
     FirstName: Optional[str] = None
     LastName: Optional[str] = None
-    Classification: Optional[str] = None
-    Major: Optional[str] = None
-
+    Display:Optional[int] = 25
+    Offset:Optional[int]= 0
+    DateCreated:Optional[str] = None
+    ListofCourses:Optional[str] = None
 """ select/insert """
 class filterStudent(BaseModel):
     FirstName:Optional[str] = None
@@ -428,11 +431,13 @@ async def AdvisingStudentyear (Semester:str):
     else:
         return formatResult(res)
 
-@app.get("/Advising/All")
+@app.post("/Advising/All")
 async def filterAdvisform(Advisform:AdvisingForms):
     count =0
     response ={}
-    sql ="SELECT * FROM `Advisingform` WHERE"
+    Limits = Advisform.Display
+    offsets = Advisform.Offset
+    sql ="SELECT *  FROM `Advisingform`  WHERE"
     if(Advisform.StudentID!=None):
         response['StudentID'] = Advisform.StudentID
     if(Advisform.Semester!=None):
@@ -447,6 +452,8 @@ async def filterAdvisform(Advisform:AdvisingForms):
         response['FirstName'] = Advisform.FirstName
     if(Advisform.LastName!=None):
         response['LastName'] = Advisform.LastName
+    if(Advisform.DateCreated!=None):
+        response['DateCreated'] = Advisform.DateCreated
     sql = sql+" "
     if(len(response)>1):
         for x,y in response.items():
@@ -459,13 +466,18 @@ async def filterAdvisform(Advisform:AdvisingForms):
     else:
         for x,y in response.items():
             sql = sql + " " + '`' + x +'`'  + " " + "="+ " "+ "'" +str(y) +"'"  
+    sql = sql+" "
+    sql =sql + "LIMIT" + " " + str(Limits)
+    sql = sql+" "
+    sql = sql+ "OFFSET" + " " + str(offsets)
     sql = sql + ";"
     res = cnx.query(sql)
     result = res['data']
     if(len(result) ==0):
-        return 'Invalid Advising filters'
+        send = 'Invalid Advising filters'
     else:
-        return formatResult(res)
+        send = formatResult(res)
+    return send
 
 @app.post("/AddStudent")
 async def student(sqlList:Addstudent):
@@ -633,8 +645,8 @@ async def MakeAdvisingform(sqlList:list):
     sql = f"SELECT `Crn`,`Subj`,`Crse`,`Sect`,`Title`,`Days`,`Begin`,`End` FROM `CourseInfo` WHERE `Crn` IN {tostrig}"
     res = cnx.query(sql)
     iterate = formatResult(res)
-    col = '<th>'
-    ecol ='</th>'
+    col = '<td>'
+    ecol ='</td>'
     test ="""<div>
 <table style="border-spacing:2em;" >
   <tr>
