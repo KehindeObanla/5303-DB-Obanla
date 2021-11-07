@@ -536,9 +536,9 @@ async def Addcourses(sqlList:Addcourse):
     end = str(sqlList.End)
     days = str(sqlList.Days)
     if 'None' not in end:
-        end = Timetwenty(end)
+        end = end
     if 'None' not in begin:
-        begin = Timetwenty(begin)
+        begin = begin
     bldg = str(sqlList.Bldg)
     room = str(sqlList.Room)
     Year = int(sqlList.year)
