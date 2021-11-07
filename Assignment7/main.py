@@ -7,8 +7,18 @@ from fastapi import FastAPI,Request
 from pydantic import BaseModel;
 from fastapi.responses import RedirectResponse,HTMLResponse
 from datetime import datetime
+from fastapi.middleware.cors import CORSMiddleware
 
-
+app = FastAPI()
+origins = ["*"]
+ 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 #helper function
 # 24 -12
@@ -41,7 +51,7 @@ class Time(BaseModel):
     Begin:str
     End: Optional[str] = None
 
-
+""" select """
 class filter(BaseModel):
         Col:  Optional[str] = None
         Crn: Optional[str] = None
@@ -58,7 +68,7 @@ class filter(BaseModel):
         End: Optional[str] = None
         Bldg:  Optional[str] = None
         Room: Optional[str] = None
-
+""" insert """
 class Addcourse(BaseModel):
     Col:  str
     Crn: str
@@ -77,6 +87,7 @@ class Addcourse(BaseModel):
     Room: Optional[str] = None
     year:int
     Season:str
+""" update """ 
 class patchcourse(BaseModel):
     Col:  Optional[str] = None
     Crn: str
@@ -95,7 +106,7 @@ class patchcourse(BaseModel):
     Room: Optional[str] = None
     year:Optional[str] = None
     Season:Optional[str] = None
-
+""" select """
 class Addstudent(BaseModel):
     FirstName:str
     LastName:str
@@ -104,6 +115,7 @@ class Addstudent(BaseModel):
     Email: Optional[str] = None
     Gpa:Optional[float] = -1
     GithubUname:Optional[str] = None
+""" update """   
 class patchstudent(BaseModel):
     FirstName:Optional[str] = None
     LastName:Optional[str] = None
@@ -112,30 +124,40 @@ class patchstudent(BaseModel):
     Email: Optional[str] = None
     Gpa:Optional[float] = -1
     GithubUname:Optional[str] = None
+""" insert """
 class AddAdvisingF(BaseModel):
     StudentID:str
     Semester:str
     Year:str
     ListofCourses:str
     DateCreated:str
-
+    FirstName: str
+    LastName: str
+    Classification: Optional[str] = None
+    Major: Optional[str] = None
+""" update """    
 class PatchAdvising(BaseModel):
     StudentID:str
-    Semester:Optional[str]
-    Year:Optional[int]
-    ListofCourses:Optional[str]
-    DateCreated:Optional[str]
-
+    Semester:Optional[str]  = None
+    Year:Optional[str] =None
+    ListofCourses:Optional[str] = None
+    DateCreated:Optional[str] = None
+    FirstName: Optional[str] = None
+    LastName: Optional[str] = None
+    Classification: Optional[str] = None
+    Major: Optional[str] = None
+""" select """
 class AdvisingForms(BaseModel):
     StudentID:Optional[str] = None
     Semester:Optional[str] = None
     Year:Optional[str] = None
-
+    Classification: Optional[str] = None
+    Major: Optional[str] = None
 
 
 """ Api """
 
-app = FastAPI()
+
 
 with open('/var/www/html/Database/.config.json') as f:
     config = json.loads(f.read())
@@ -389,6 +411,10 @@ async def filterAdvisform(Advisform:AdvisingForms):
         response['Semester'] = Advisform.Semester
     if(Advisform.Year!=None):
         response['Year'] = Advisform.Year
+    if(Advisform.Classification!=None):
+        response['Classification'] = Advisform.Classification
+    if(Advisform.Major!=None):
+        response['Major'] = Advisform.Classification
     if(len(response)>1):
         for x,y in response.items():
             sql = sql + " " + '`' + x +'`'  + " " + "="+ " "+ "'" +str(y) +"'"  
@@ -454,12 +480,20 @@ async def AdvisingformPatch(sqlList:PatchAdvising):
     sql ="UPDATE `Advisingform` SET"
     if(sqlList.Semester!=None):
         response['Semester'] = sqlList.Semester
-    if(sqlList.Year!=None):
+    if(sqlList.Year!=0):
         response['Year'] = sqlList.Year
     if(sqlList.ListofCourses!=None):
         response['ListofCourses'] = sqlList.ListofCourses
     if(sqlList.DateCreated!=None):
         response['DateCreated'] = sqlList.DateCreated
+    if(sqlList.FirstName!=None):
+        response['FirstName'] = sqlList.FirstName
+    if(sqlList.LastName!=None):
+        response['LastName'] = sqlList.LastName
+    if(sqlList.Classification!=None):
+        response['Classification'] = sqlList.Classification
+    if(sqlList.Major!=None):
+        response['Major'] = sqlList.Major
     sql = sql+" "
     for x,y in response.items():
         sql = sql + '`' + x +'`'  + " " + "="+ " "+ "'" +str(y) +"'"  + ","
@@ -477,7 +511,11 @@ async def student(sqlList:AddAdvisingF):
     Mnum= str(sqlList.StudentID)
     Courses = str(sqlList.ListofCourses)
     Created= str(sqlList.DateCreated)
-    sql ='INSERT INTO `Advisingform` (`Semester`, `Year`, `StudentID`, `ListofCourses`, `DateCreated`) VALUES ("{Semester}", "{Year}", "{StudentID}", "{ListofCourses}", "{DateCreated}")'.format(Semester=semester ,Year =year ,StudentID = Mnum , ListofCourses =Courses ,DateCreated= Created )
+    firstName = str(sqlList.FirstName)
+    lastName =str(sqlList.LastName)
+    classification = str(sqlList.Classification)
+    major = str(sqlList.Major)
+    sql ='INSERT INTO `Advisingform` (`Semester`, `Year`, `StudentID`, `ListofCourses`, `DateCreated`, `FirstName`, `LastName`, `Classification`, `Major`) VALUES ("{Semester}", "{Year}", "{StudentID}", "{ListofCourses}", "{DateCreated}","{FirstName}","{LastName}","{Classification}","{Major}")'.format(Semester=semester ,Year =year ,StudentID = Mnum , ListofCourses =Courses ,DateCreated= Created,FirstName=firstName,LastName=lastName,Classification=classification if 'None' not in classification else " ",Major=major if 'None' not in major else " " )
     res =cnx.query(sql)
     return res
 
@@ -550,3 +588,45 @@ async def AdvisingformPatch(sqlList:patchcourse):
     print(sql)
     res = cnx.query(sql)
     return res
+
+
+@app.post("/maketable",response_class=HTMLResponse)
+async def MakeAdvisingform(sqlList:list):
+    hours =0
+    tostrig = str(sqlList)
+    tostrig=tostrig.replace('[', '(')
+    tostrig=tostrig.replace(']', ')')
+    sql = f"SELECT `Crn`,`Subj`,`Crse`,`Sect`,`Title`,`Days`,`Begin`,`End` FROM `CourseInfo` WHERE `Crn` IN {tostrig}"
+    res = cnx.query(sql)
+    iterate = formatResult(res)
+    col = '<th>'
+    ecol ='</th>'
+    test ="""<div>
+<table style="border-spacing:2em;" >
+  <tr>
+    <th>CRN</th>
+    <th>Subj</th>
+    <th>Course</th>
+    <th>Sect</th>
+    <th>Title</th>
+    <th>Day</th>
+    <th>begin</th>
+    <th>end</th>
+  </tr>
+ 
+
+    """
+    if(iterate !="invalid subject"):
+        for row in iterate:
+            newtest ='<tr>'
+            for x,y in row.items():
+                if(x =='Crse'):
+                    lasdigit = int(y[-1])
+                    hours+=lasdigit
+                newtest += col + str(y) +ecol 
+            newtest +='</tr>'
+            test += newtest 
+        test+='</table>'
+        test+='</div>'
+        test+= "<div style ='text-decoration: underline'>"+'Total hours'+" " +str(hours) +'<div>'
+    return test
