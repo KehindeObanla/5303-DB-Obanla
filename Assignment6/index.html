@@ -1,90 +1,121 @@
-<table style="border-spacing:2em; width:100%; border-collapse: collapse;">
-	<tr>
-		<th>Semester</th>
-		<th>Year</th>
-		<th>StudentID</th>
-		<th>ListofCourses</th>
-		<th>Date Created </th>
-		<th>FirstName</th>
-		<th>LastName</th>
-		<th>Classification</th>
-		<th>Major</th>
-	</tr>
-	<tr>
-		<td>Summer1</td>
-		<td>2022</td>
-		<td>Mitsyou</td>
-		<td>30775,30745,30743</td>
-		<td>2021-11-06</td>
-		<td>tome</td>
-		<td>Wheniclose</td>
-		<td>Sophomore</td>
-		<td>Computer science</td>
-	</tr>
-	<tr>
-		<td>Summer1</td>
-		<td>2022</td>
-		<td>Msomuch</td>
-		<td>30775,30745,30743</td>
-		<td>2021-11-06</td>
-		<td>bebe</td>
-		<td>rehxa</td>
-		<td>junior</td>
-		<td>Fame</td>
-	</tr>
-	<tr>
-		<td>Summer1</td>
-		<td>2022</td>
-		<td>rthwretgh</td>
-		<td>30775,30745,30743</td>
-		<td>2021-11-06</td>
-		<td>rthreh</td>
-		<td>herh</td>
-		<td>Sophomore</td>
-		<td>therhgre</td>
-	</tr>
-	<tr>
-		<td>Summer1</td>
-		<td>2022</td>
-		<td>uyoli8oeu45y</td>
-		<td>h5y54yu5u</td>
-		<td>2021-11-06</td>
-		<td>trhtrh</td>
-		<td>rthtrjhju7yui</td>
-		<td>junior</td>
-		<td>trhrthtr</td>
-	</tr>
-	<tr>
-		<td>Summer1</td>
-		<td>2022</td>
-		<td>Wmoyewgfuyhe8</td>
-		<td>30775,30745,30743</td>
-		<td>2021-11-06</td>
-		<td>Help</td>
-		<td>Was</td>
-		<td>Senior</td>
-		<td>Music</td>
-	</tr>
-	<tr>
-		<td>Summer1</td>
-		<td>2022</td>
-		<td>ytjdtyj</td>
-		<td>30775,30745,30743</td>
-		<td>2021-11-06</td>
-		<td>tdyjtyj</td>
-		<td>tydjdj</td>
-		<td>junior</td>
-		<td>dyjytjy</td>
-	</tr>
-	<tr>
-		<td>Summer1</td>
-		<td>2022</td>
-		<td>yukuykuk</td>
-		<td>30775,30745,30743</td>
-		<td>2021-11-06</td>
-		<td>yukuykf</td>
-		<td>kfykyuk</td>
-		<td>junior</td>
-		<td>uykfyuk</td>
-	</tr>
-</table>
+<h1>Midwestern State University Course Schedule</h1>
+  <div class ="teststile">
+      <button @click="$router.push('mainpage')">Home</button>
+      <button @click="$router.push('Editcourse')">Edit course  schedule</button>
+    </div>
+    <br><br>
+   <form v-on:submit.prevent="Seecourse" class="Seecourses">
+    <div ref="content">
+		<table class ="help">
+			<tr>
+				<td>
+					Semester<select name="Semester" id="Semester"  v-model="tosend.Season">
+						<option value="Fall">Fall</option>
+						<option value="Spring">Spring</option>
+						<option value="Summer1">Summer1</option>
+						<option value="Summer2">Summer2</option>
+					  </select>
+				   </td>
+				<td> College<input type="text"  list="Cols" v-model="tosend.Col" /> 
+				 <datalist  name="Col" id="Cols" >
+				   <option v-for="item in Cols" :key="item" :value="item" />
+				 </datalist> </td>
+				 
+				 <td>
+					 Subject<input type="text"  list="Subj" v-model="tosend.Subj"/>
+					 <datalist name="Subj" id="Subj" >
+					   <option v-for="item in Subjs" :key="item" :value="item" />
+					 </datalist>
+				 </td>
+				 <td>
+					 Buliding<input type="text"  list="Bldg"  v-model="tosend.Bldg" />
+					 <datalist name="Bldg" id="Bldg">
+					 <option v-for="item in Bldgs" :key="item" :value="item" />
+					 </datalist>
+				 </td>
+				 <td>
+					 Year<select name="year" id="year"  v-model="tosend.year">
+						 <option value="2021">2021</option>
+						 <option value="2022">2022</option>
+					   </select>
+				 </td>
+			</tr>
+			<tr>
+			 <td>
+				 Course<input type="text" id="Crse" name="Crse"  v-model="tosend.Crse" /></select>
+			 </td>
+			 <td>
+				 Section<input type="text" id="Sect" name="Sect"  v-model="tosend.Sect" />
+			 </td>
+			 <td>
+				 Title: <input
+				 type="text"
+				 id="Title"
+				 name="Title"
+				 v-model="tosend.Title"
+			   />
+			 </td>
+			 <td>
+				 PrimaryInstructor<input
+				 type="text"
+				 id="PrimaryInstructor"
+				 name="PrimaryInstructor"
+				 v-model="tosend.PrimaryInstructor"
+			   />
+			 </td>
+			</tr>
+			<tr>
+				 <td>
+					 Crn:<input type="text" id="Crn" name="Crn" v-model="tosend.Crn"/>
+				 <td>
+					 Max <input type="number" id="Max" name="Max" v-model="tosend.Max"/>
+				 </td>
+				 <td> Current<input type="number" id="Curr" name="Curr" v-model="tosend.Curr" /></td>
+				 <td> Avalable <input type="number" id="Aval" name="Aval" v-model="tosend.Aval" /></td>
+			</tr>
+			<tr>
+			 <td>
+				 Days<input type="text" id="Days" name="Days" v-model="tosend.Days" /><br>
+			 </td>
+			 <td>
+				 Begin <input type="time" id="Begin" name="Begin" v-model="tosend.Begin" />
+			 </td>
+			 <td>End<input type="time" id="End" name="End" v-model="tosend.End" /></td>
+			 <td>Room<input type="text" id="Room" name="Room" v-model="tosend.Room" /></td>
+			 </tr>
+			
+			
+		</table>
+    </div>
+    
+    <div class="submit">
+    <button>GO</button>
+  </div>
+  </form>
+  <style>
+	  .help{
+		display: table;
+    border-collapse: separate;
+    box-sizing: border-box;
+    text-indent: initial;
+    white-space: normal;
+    line-height: normal;
+    font-weight: normal;
+    font-size: medium;
+    font-style: normal;
+    color: -internal-quirk-inherit;
+    text-align: start;
+    border-spacing: 2px;
+    border-color: grey;
+    font-variant: normal;
+	  }
+	  .teststile{
+		padding: 10px;
+       text-align: left;
+	   font-size: 12px;
+    font-family: Arial, Helvetica, Geneva, sans-serif;
+	border: none;
+}
+	  
+	 
+  </style>

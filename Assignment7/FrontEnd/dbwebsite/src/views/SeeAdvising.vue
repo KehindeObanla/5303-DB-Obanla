@@ -200,10 +200,6 @@ export default {
         })
         .then((res) => {
           //Perform Success Action
-          // JSON responses are automatically parsed.
-
-          //this.Addthis = res.data;
-          //this.$refs.tableadd.innerHTML = this.Addthis;
           if(res.data !="Invalid Advising filters")
           {
               this.countTable = this.tableStuff.length
@@ -230,15 +226,11 @@ export default {
   },
   watch:{
 'tosend.Display':function(val){
-   console.log(val)
    this.tosend.Display =val
-  console.log(this.tosend.Display)
    this.Seeform()
 },
 'tosend.Offset':function(val){
-  console.log(val)
   this.tosend.Offset =val
-  console.log(this.tosend.Offset)
   this.Seeform()
 }
   }

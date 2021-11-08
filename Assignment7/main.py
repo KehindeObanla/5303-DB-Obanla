@@ -286,7 +286,7 @@ async def ClassTyme(buldroom:str):
         else:
             return formatResult(res)
 
-@app.get("/Annony")
+@app.post("/Annony")
 async def filterall(sqlList:filter):
     sql ="SELECT * FROM `CourseInfo` WHERE" 
     response ={}
@@ -327,19 +327,30 @@ async def filterall(sqlList:filter):
     sql = sql+" "
     if(len(response)>1):
         for x,y in response.items():
-            sql = sql + " " + '`' + x +'`'  + " " + "="+ " "+ "'" +str(y) +"'"  
+            if(x == "PrimaryInstructor" or x =='Title' ):
+                PIT = '%' + str(y) +'%'
+                sql = sql + " " + '`' + x +'`'  + " " + "LIKE"+ " "+ "'" +PIT +"'"
+            else:
+             sql = sql + " " + '`' + x +'`'  + " " + "="+ " "+ "'" +str(y) +"'"  
             del response[x]
             break
         for x,y in response.items():
             addand = 'AND'
-            sql = sql + addand + " " + '`' + x +'`'  + " " + "="+ " "+ "'" +str(y) +"'"      
+            if(x == "PrimaryInstructor" or x =="Title"):
+                PIT = '%' + str(y) +'%'
+                sql = sql+addand + " " + '`' + x +'`'  + " " + "LIKE"+ " "+ "'" +PIT +"'"
+            else:
+             sql = sql + addand + " " + '`' + x +'`'  + " " + "="+ " "+ "'" +str(y) +"'"      
     else:
         for x,y in response.items():
-            sql = sql + " " + '`' + x +'`'  + " " + "="+ " "+ "'" +str(y) +"'"  
+            if(x == "PrimaryInstructor" or x =="Title"):
+                PIT = '%' + str(y) +'%'
+                sql = sql + " " + '`' + x +'`'  + " " + "LIKE"+ " "+ "'" +PIT +"'"
+            else:
+                sql = sql + " " + '`' + x +'`'  + " " + "="+ " "+ "'" +str(y) +"'"  
     sql = sql + ";"
-    print(sql)
+    
     res = cnx.query(sql)
-    result = res['data']
     result = res['data']
     if(len(result) ==0):
         return 'no available class'
