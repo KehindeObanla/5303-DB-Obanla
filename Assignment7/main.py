@@ -523,10 +523,10 @@ async def filterAdvisform(Advisform:AdvisingForms):
     sql = sql+" "
     sql = sql+ "OFFSET" + " " + str(offsets)
     sql = sql + ";"
-    print(sql)
+    
     res = cnx.query(sql)
     result = res['data']
-    print(result)
+    
     if(len(result) ==0):
         send = 'Invalid Advising filters'
     else:

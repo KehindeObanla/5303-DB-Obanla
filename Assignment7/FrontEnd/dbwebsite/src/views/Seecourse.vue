@@ -120,6 +120,8 @@
     <th>Sect</th>
     <th>Title</th>
     <th>PrimaryInstructor</th>
+    <th>Max</th>
+    <th>curr</th>
     <th>Aval</th>
     <th>Days</th>
     <th>Begin</th>
@@ -137,6 +139,8 @@
       <th>{{item.Sect}}</th>
       <th>{{item.Title}}</th>
       <th>{{item.PrimaryInstructor}}</th>
+      <th>{{item.Max}}</th>
+      <th>{{item.Curr}}</th>
       <th>{{item.Aval}}</th>
       <th>{{item.Days}}</th>
       <th>{{item.Begin}}</th>
@@ -332,7 +336,7 @@ data() {
 }
 </script>
 
-<style>
+<style scoped>
 button {
   background: #0b6dff;
   border: 0;
@@ -346,14 +350,13 @@ button {
   width: 100%;
 }
 
-.done th, td {
+.doneTable th, .doneTable td{
   text-align: left;
   padding: 8px;
+  border: 1px solid black;
 }
 
-.done tr:nth-child(even) {
-  background-color: #48a7a7;
-}
+
 .error {
   color: #ff0062;
   margin-top: 10px;
