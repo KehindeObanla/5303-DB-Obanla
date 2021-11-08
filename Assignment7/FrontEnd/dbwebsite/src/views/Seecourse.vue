@@ -5,7 +5,7 @@
     </div>
     <br><br>
    <form v-on:submit.prevent="Seecourse" class="Seecourses">
-    <div ref="content">
+    <div>
 		<table class ="help">
 			<tr>
 				<td>
@@ -33,12 +33,7 @@
 					 <option v-for="item in Bldgs" :key="item" :value="item" />
 					 </datalist>
 				 </td>
-				 <td>
-					 Year<select name="year" id="year"  v-model="tosend.year">
-						 <option value="2021">2021</option>
-						 <option value="2022">2022</option>
-					   </select>
-				 </td>
+				 
 			</tr>
 			<tr>
 			 <td>
@@ -68,21 +63,43 @@
 				 <td>
 					 Crn:<input type="text" id="Crn" name="Crn" v-model="tosend.Crn"/>
            </td>
-				 <td>
-					 Max <input type="number" id="Max" name="Max" v-model="tosend.Max"/>
-				 </td>
-				 <td> Current<input type="number" id="Curr" name="Curr" v-model="tosend.Curr" /></td>
-				 <td> Avalable <input type="number" id="Aval" name="Aval" v-model="tosend.Aval" /></td>
+				 <td> Avalable
+           <select name="Aval" id="Aval"  v-model="tosend.Aval">
+						 <option value="1">Open</option>
+						 <option value="0">Close</option>
+					   </select>
+            </td>
+         <td>
+				 Days<select name="Days" id="Days" v-model="tosend.Days">
+          <option value="M">Monday</option>
+          <option value="T">Tuesday</option>
+          <option value="W">Wednesday</option>
+          <option value="R">Thursday</option>
+          <option value="F">Friday</option>
+          <option value="S">Saturday</option>
+          <option value="SU">Sunday</option>
+          </select>
+			 </td>
+        <td>Room<input type="text" id="Room" name="Room" v-model="tosend.Room" /></td>
 			</tr>
 			<tr>
-			 <td>
-				 Days<input type="text" id="Days" name="Days" v-model="tosend.Days" /><br>
-			 </td>
+			 
 			 <td>
 				 Begin <input type="time" id="Begin" name="Begin" v-model="tosend.Begin" />
 			 </td>
 			 <td>End<input type="time" id="End" name="End" v-model="tosend.End" /></td>
-			 <td>Room<input type="text" id="Room" name="Room" v-model="tosend.Room" /></td>
+       <td>
+					 Year<select name="year" id="year"  v-model="tosend.year">
+						 <option value="2021">2021</option>
+						 <option value="2022">2022</option>
+					   </select>
+				 </td>
+			<td>Display
+    <select name="Display" id="Display" v-model="tosend.Display">
+      <option value="25">25</option>
+      <option value="50">50</option>
+      <option value="100">100</option></select
+    ></td>
 			 </tr>
 			
 			
@@ -103,8 +120,6 @@
     <th>Sect</th>
     <th>Title</th>
     <th>PrimaryInstructor</th>
-    <th>Max</th>
-    <th>Curr</th>
     <th>Aval</th>
     <th>Days</th>
     <th>Begin</th>
@@ -122,8 +137,6 @@
       <th>{{item.Sect}}</th>
       <th>{{item.Title}}</th>
       <th>{{item.PrimaryInstructor}}</th>
-      <th>{{item.Max}}</th>
-      <th>{{item.Curr}}</th>
       <th>{{item.Aval}}</th>
       <th>{{item.Days}}</th>
       <th>{{item.Begin}}</th>
@@ -135,9 +148,14 @@
     </tr>
    </table>
   </div>
+  <div id="divCheckbox"  v-show="hasArrived">
+  <button @click="tosend.Offset =tosend.Display"  >next </button>
+  <button @click="tosend.Offset-=tosend.Display" v-if="tosend.Offset>=tosend.Display">back </button>
+</div>
 </template>
 
 <script>
+import axios from "axios";
 export default {
 data() {
     return {
@@ -149,16 +167,15 @@ data() {
         Sect: "",
         Title: "",
         PrimaryInstructor: "",
-        Max: -1,
-        Curr: -1,
-        Aval: -1,
+        Aval: 1,
         Days: "",
         Begin: "",
         End: "",
-         Bldg:"",
+        Bldg:"",
         Room: "",
-        year: 0,
-        Season: "",
+        year: 2022,
+        Season: "Fall",
+        Display:25
       },
       passwordError: "",
       Cols: ["HH", "BA", "ED", "FA", "HM", "UN", "SE"],
@@ -256,12 +273,61 @@ data() {
           "UNT",
           "VB",
         ],
+      hasArrived:false,
+      tableStuff: [],
+      countTable :0,
+      hasTable:false
     };
   },
   methods:{
     Seecourse(){
-      
+      var otherdic = {}
+      for (var things in this.tosend){
+         if(this.tosend[things] != "")
+         {
+           otherdic[things] = this.tosend[things]
+         }
+      }
+      console.log(JSON.stringify(otherdic))
+      axios
+        .post("http://143.244.153.25:8004/Annony",JSON.stringify(otherdic), {
+          headers: { "Content-Type": "application/json" },
+        })
+        .then((res) => {
+          //Perform Success Action
+          if(res.data !="no available class")
+          {
+              this.countTable = this.tableStuff.length
+              this.tableStuff = res.data
+              this.hasArrived = true
+              this.hasTable =true
+          }
+          else{
+              this.hasArrived = true
+              this.hasTable = false
+          }
+          
+          
+        })
+        .catch((error) => {
+          // error.response.status Check status code
+          console.log(error);
+        })
+        .finally(() => {
+          //Perform action in always
+          
+        });
     }
+  },
+   watch:{
+'tosend.Display':function(val){
+   this.tosend.Display =val
+   this.Seecourse()
+},
+'tosend.Offset':function(val){
+  this.tosend.Offset =val
+  this.Seecourse()
+}
   }
 }
 </script>

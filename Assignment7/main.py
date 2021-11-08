@@ -72,6 +72,8 @@ class filter(BaseModel):
         Room: Optional[str] = None
         year: Optional[str] = None
         Season:Optional[str] = None
+        Display:Optional[int] = 25
+        Offset:Optional[int] = 0
 """ insert """
 class Addcourse(BaseModel):
     Col:  str
@@ -288,6 +290,8 @@ async def ClassTyme(buldroom:str):
 
 @app.post("/Annony")
 async def filterall(sqlList:filter):
+    Limits = sqlList.Display
+    offsets = sqlList.Offset
     sql ="SELECT * FROM `CourseInfo` WHERE" 
     response ={}
     if(sqlList.Col!=None):
@@ -330,8 +334,20 @@ async def filterall(sqlList:filter):
             if(x == "PrimaryInstructor" or x =='Title' ):
                 PIT = '%' + str(y) +'%'
                 sql = sql + " " + '`' + x +'`'  + " " + "LIKE"+ " "+ "'" +PIT +"'"
+            elif(x =="Aval"):
+                if(y == 1):  
+                    sql = sql + " " + '`' + x +'`'  + " " + ">"+ " "+ "'" +str(y) +"'"
+                else:
+                    sql = sql + " " + '`' + x +'`'  + " " + "="+ " "+ "'" +str(0) +"'"
+            elif(x =="Days"):
+                if(y =='SU'):
+                    firstchar = y+'%'
+                else:
+                    firstchar = '%'+y[0]+'%'
+                sql = sql + " " + '`' + x +'`'  + " " + "LIKE"+ " "+ "'" +firstchar+"'"
+                
             else:
-             sql = sql + " " + '`' + x +'`'  + " " + "="+ " "+ "'" +str(y) +"'"  
+                sql = sql + " " + '`' + x +'`'  + " " + "="+ " "+ "'" +str(y) +"'"  
             del response[x]
             break
         for x,y in response.items():
@@ -339,17 +355,42 @@ async def filterall(sqlList:filter):
             if(x == "PrimaryInstructor" or x =="Title"):
                 PIT = '%' + str(y) +'%'
                 sql = sql+addand + " " + '`' + x +'`'  + " " + "LIKE"+ " "+ "'" +PIT +"'"
+            elif(x =="Aval"):
+                if(y == 1):  
+                    sql = sql+ addand +  " " + '`' + x +'`'  + " " + ">"+ " "+ "'" +str(y) +"'"
+                else:
+                    sql = sql + addand +  " " + '`' + x +'`'  + " " + "="+ " "+ "'" +str(0) +"'"
+            elif(x =="Days"):
+                if(y =='SU'):
+                    firstchar = y+'%'
+                else:
+                    firstchar = '%'+y[0]+'%'
+                sql = sql + addand + " " + '`' + x +'`'  + " " + "LIKE"+ " "+ "'" +firstchar+"'"
+
             else:
-             sql = sql + addand + " " + '`' + x +'`'  + " " + "="+ " "+ "'" +str(y) +"'"      
+                sql = sql + addand + " " + '`' + x +'`'  + " " + "="+ " "+ "'" +str(y) +"'"      
     else:
         for x,y in response.items():
             if(x == "PrimaryInstructor" or x =="Title"):
                 PIT = '%' + str(y) +'%'
                 sql = sql + " " + '`' + x +'`'  + " " + "LIKE"+ " "+ "'" +PIT +"'"
+            elif(x =="Aval"):
+                if(y == 1):  
+                    sql = sql + " " + '`' + x +'`'  + " " + ">"+ " "+ "'" +str(y) +"'"
+                else:
+                    sql = sql + " " + '`' + x +'`'  + " " + "="+ " "+ "'" +str(0) +"'"
+            elif(x =="Days"):
+                if(y =='SU'):
+                    firstchar = y+'%'
+                else:
+                    firstchar = '%'+y[0]+'%'
+                sql = sql + " " + '`' + x +'`'  + " " + "LIKE"+ " "+ "'" +firstchar+"'"
             else:
                 sql = sql + " " + '`' + x +'`'  + " " + "="+ " "+ "'" +str(y) +"'"  
-    sql = sql + ";"
-    
+    sql =sql + "LIMIT" + " " + str(Limits)
+    sql = sql+" "
+    sql = sql+ "OFFSET" + " " + str(offsets)
+    sql = sql + ";" 
     res = cnx.query(sql)
     result = res['data']
     if(len(result) ==0):
