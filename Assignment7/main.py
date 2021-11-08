@@ -171,9 +171,10 @@ class filterStudent(BaseModel):
     LastName:Optional[str] = None
     Mnumber:Optional[str] = None
     Classification: Optional[str] = None
-    Email: Optional[str] = None
     Gpa:Optional[float] = -1
-    GithubUname:Optional[str] = None
+    Display:Optional[int] = 25
+    Offset:Optional[int]= 0
+    GPAL:Optional[int] = 0
 """ Api """
 
 
@@ -402,7 +403,6 @@ async def filterall(sqlList:filter):
 async def Allstudent():
     sql ='SELECT * FROM `StudentIInfo`'
     res = cnx.query(sql)
-    
     return formatResult(res)
 
 @app.get("/student/Mnumber/{Mnumber}")
@@ -451,7 +451,6 @@ async def GPAL(GPA:int):
 async def Advising ():
     sql =f'SELECT * FROM `Advisingform`'
     res = cnx.query(sql)
-    
     return formatResult(res)
 
 @app.get("/Advising/student/{Mnumber}")
@@ -685,7 +684,7 @@ async def AdvisingformPatch(sqlList:patchcourse):
     sql = sql + " WHERE `CourseInfo`.`Crn` = "
     sql = sql + "'"+str(sqlList.Crn)+"'"
     sql = sql + ";"
-    print(sql)
+    
     res = cnx.query(sql)
     return res
 
@@ -732,8 +731,11 @@ async def MakeAdvisingform(sqlList:list):
     return test
 
 
-@app.get("/filterstudent")
+@app.post("/filterstudent")
 async def filterstudent(sqlList:filterStudent):
+    Limits = sqlList.Display
+    offsets = sqlList.Offset
+    GPAL = sqlList.GPAL
     response ={}
     sql ="SELECT * FROM `StudentIInfo` WHERE"
     if(sqlList.FirstName!=None):
@@ -742,27 +744,48 @@ async def filterstudent(sqlList:filterStudent):
         response['LastName'] = sqlList.LastName
     if(sqlList.Classification!=None):
         response['Classification'] = sqlList.Classification
-    if(sqlList.Email!=None):
-        response['Email'] = sqlList.Email
     if(sqlList.Gpa!=-1):
         response['Gpa'] = sqlList.Gpa
-    if(sqlList.GithubUname!=None):
-        response['GithubUname'] = sqlList.GithubUname
     if(sqlList.Mnumber!=None):
         response['Mnumber'] = sqlList.Mnumber
     sql = sql+" "
     if(len(response)>1):
         for x,y in response.items():
-            sql = sql + " " + '`' + x +'`'  + " " + "="+ " "+ "'" +str(y) +"'"  
+            if(x =="Gpa" and GPAL == 0 ):
+                sql = sql + " " + '`' + x +'`'  + " " + ">="+ " "+ "'" +str(y) +"'"
+            elif(x =="Gpa" and GPAL == 1) :
+                sql = sql + " " + '`' + x +'`'  + " " + "<="+ " "+ "'" +str(y) +"'" 
+            elif(x =="Gpa" and GPAL == 2):
+                sql = sql + " " + '`' + x +'`'  + " " + "="+ " "+ "'" +str(y) +"'"
+            else:
+                sql = sql + " " + '`' + x +'`'  + " " + "="+ " "+ "'" +str(y) +"'"  
             del response[x]
             break
         for x,y in response.items():
             addand = 'AND'
-            sql = sql + addand + " " + '`' + x +'`'  + " " + "="+ " "+ "'" +str(y) +"'"      
+            if(x =="Gpa" and GPAL == 0 ):
+                sql = sql + addand + " " + '`' + x +'`'  + " " + ">="+ " "+ "'" +str(y) +"'"
+            elif(x =="Gpa" and GPAL == 1) :
+                sql = sql + addand + " " + '`' + x +'`'  + " " + "<="+ " "+ "'" +str(y) +"'" 
+            elif(x =="Gpa" and GPAL == 2):
+                sql = sql + addand + " " + '`' + x +'`'  + " " + "="+ " "+ "'" +str(y) +"'"
+            else:
+                sql = sql + addand + " " + '`' + x +'`'  + " " + "="+ " "+ "'" +str(y) +"'"      
     else:
         for x,y in response.items():
-            sql = sql + " " + '`' + x +'`'  + " " + "="+ " "+ "'" +str(y) +"'"  
+            if(x =="Gpa" and GPAL == 0 ):
+                sql = sql + " " + '`' + x +'`'  + " " + ">="+ " "+ "'" +str(y) +"'"
+            elif(x =="Gpa" and GPAL == 1) :
+                sql = sql + " " + '`' + x +'`'  + " " + "<="+ " "+ "'" +str(y) +"'" 
+            elif(x =="Gpa" and GPAL == 2):
+                sql = sql + " " + '`' + x +'`'  + " " + "="+ " "+ "'" +str(y) +"'"
+            else:
+                sql = sql + " " + '`' + x +'`'  + " " + "="+ " "+ "'" +str(y) +"'"  
+    sql =sql + "LIMIT" + " " + str(Limits)
+    sql = sql+" "
+    sql = sql+ "OFFSET" + " " + str(offsets)
     sql = sql + ";"
+    print(sql)
     res = cnx.query(sql)
     result = res['data']
     if(len(result) ==0):

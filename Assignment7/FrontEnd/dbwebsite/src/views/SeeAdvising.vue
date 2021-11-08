@@ -202,8 +202,10 @@ export default {
           //Perform Success Action
           if(res.data !="Invalid Advising filters")
           {
-              this.countTable = this.tableStuff.length
+              
               this.tableStuff = res.data
+              //for later how to display next
+              this.countTable = this.tableStuff.length
               this.hasArrived = true
               this.hasTable =true
           }

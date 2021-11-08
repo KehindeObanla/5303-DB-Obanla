@@ -179,7 +179,8 @@ data() {
         Room: "",
         year: 2022,
         Season: "Fall",
-        Display:25
+        Display:25,
+        Offset:0
       },
       passwordError: "",
       Cols: ["HH", "BA", "ED", "FA", "HM", "UN", "SE"],
@@ -301,8 +302,10 @@ data() {
           //Perform Success Action
           if(res.data !="no available class")
           {
-              this.countTable = this.tableStuff.length
+              
               this.tableStuff = res.data
+               //for later how to display next
+              this.countTable = this.tableStuff.length
               this.hasArrived = true
               this.hasTable =true
           }
@@ -357,10 +360,5 @@ button {
 }
 
 
-.error {
-  color: #ff0062;
-  margin-top: 10px;
-  font-size: 0.8em;
-  font-weight: bold;
-}
+
 </style>

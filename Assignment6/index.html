@@ -1,88 +1,52 @@
 <h1>Midwestern State University Course Schedule</h1>
   <div class ="teststile">
       <button @click="$router.push('mainpage')">Home</button>
-      <button @click="$router.push('Editcourse')">Edit course  schedule</button>
+      <button @click="$router.push('Editstudent')">Edit course  schedule</button>
     </div>
     <br><br>
-   <form v-on:submit.prevent="Seecourse" class="Seecourses">
+   <form v-on:submit.prevent="SeeStudent" class="SeeStudent">
     <div ref="content">
 		<table class ="help">
 			<tr>
-				<td>
-					Semester<select name="Semester" id="Semester"  v-model="tosend.Season">
-						<option value="Fall">Fall</option>
-						<option value="Spring">Spring</option>
-						<option value="Summer1">Summer1</option>
-						<option value="Summer2">Summer2</option>
-					  </select>
-				   </td>
-				<td> College<input type="text"  list="Cols" v-model="tosend.Col" /> 
-				 <datalist  name="Col" id="Cols" >
-				   <option v-for="item in Cols" :key="item" :value="item" />
-				 </datalist> </td>
-				 
-				 <td>
-					 Subject<input type="text"  list="Subj" v-model="tosend.Subj"/>
-					 <datalist name="Subj" id="Subj" >
-					   <option v-for="item in Subjs" :key="item" :value="item" />
-					 </datalist>
-				 </td>
-				 <td>
-					 Buliding<input type="text"  list="Bldg"  v-model="tosend.Bldg" />
-					 <datalist name="Bldg" id="Bldg">
-					 <option v-for="item in Bldgs" :key="item" :value="item" />
-					 </datalist>
-				 </td>
-				 <td>
-					 Year<select name="year" id="year"  v-model="tosend.year">
-						 <option value="2021">2021</option>
-						 <option value="2022">2022</option>
-					   </select>
-				 </td>
-			</tr>
-			<tr>
 			 <td>
-				 Course<input type="text" id="Crse" name="Crse"  v-model="tosend.Crse" /></select>
+				FirstName<input type="text" id="FirstName" name="FirstName"  v-model="tosend.FirstName" />
 			 </td>
 			 <td>
-				 Section<input type="text" id="Sect" name="Sect"  v-model="tosend.Sect" />
+				LastName<input type="text" id="LastName" name="LastName"  v-model="tosend.LastName" />
 			 </td>
 			 <td>
-				 Title: <input
-				 type="text"
-				 id="Title"
-				 name="Title"
-				 v-model="tosend.Title"
-			   />
+				Mnumber<input type="text" id="Mnumber" name="Mnumber"  v-model="tosend.Mnumber" />
 			 </td>
 			 <td>
-				 PrimaryInstructor<input
-				 type="text"
-				 id="PrimaryInstructor"
-				 name="PrimaryInstructor"
-				 v-model="tosend.PrimaryInstructor"
-			   />
+				<select
+				name="Classification"
+				id="Classification"
+				v-model="tosend.Classification"
+			  >
+				<option value="Freshman">Freshman</option>
+				<option value="Sophomore">Sophomore</option>
+				<option value="junior">junior</option>
+				<option value="Senior">Senior</option>
+			  </select>
 			 </td>
 			</tr>
 			<tr>
 				 <td>
-					 Crn:<input type="text" id="Crn" name="Crn" v-model="tosend.Crn"/>
+					<select name="Display" id="Display" v-model="tosend.Display">
+						<option value="25">25</option>
+						<option value="50">50</option>
+						<option value="100">100</option></select
+					  >
+				</td>
 				 <td>
-					 Max <input type="number" id="Max" name="Max" v-model="tosend.Max"/>
+					 GPA <input type="number" id="GPA" name="GPA" v-model="tosend.GPA"/>
 				 </td>
-				 <td> Current<input type="number" id="Curr" name="Curr" v-model="tosend.Curr" /></td>
-				 <td> Avalable <input type="number" id="Aval" name="Aval" v-model="tosend.Aval" /></td>
+				 <td> <select name="GPAL" id="GPAL" v-model="tosend.GPAL">
+					<option value="0">Greater</option>
+					<option value="1">Less</option>
+					</select></td>
+				
 			</tr>
-			<tr>
-			 <td>
-				 Days<input type="text" id="Days" name="Days" v-model="tosend.Days" /><br>
-			 </td>
-			 <td>
-				 Begin <input type="time" id="Begin" name="Begin" v-model="tosend.Begin" />
-			 </td>
-			 <td>End<input type="time" id="End" name="End" v-model="tosend.End" /></td>
-			 <td>Room<input type="text" id="Room" name="Room" v-model="tosend.Room" /></td>
-			 </tr>
 			
 			
 		</table>
