@@ -16,12 +16,7 @@
     >&ensp;&ensp;&ensp; Year<select name="year" id="year" v-model="tosend.Year">
       <option value="2022">2022</option>
       <option value="2021">2021</option></select
-    >&ensp;&ensp;&ensp;&ensp;&ensp;&ensp; Date<input
-      type="date"
-      id="DateCreated"
-      name="DateCreated"
-      v-model="tosend.DateCreated"
-    />
+    >
     &ensp;&ensp;&ensp;&ensp;&ensp; FirstName<input
       type="text"
       id="Fname"

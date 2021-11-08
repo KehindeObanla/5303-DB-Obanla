@@ -447,7 +447,7 @@ async def filterAdvisform(Advisform:AdvisingForms):
     if(Advisform.Classification!=None):
         response['Classification'] = Advisform.Classification
     if(Advisform.Major!=None):
-        response['Major'] = Advisform.Classification
+        response['Major'] = Advisform.Major
     if(Advisform.FirstName!=None):
         response['FirstName'] = Advisform.FirstName
     if(Advisform.LastName!=None):
@@ -471,8 +471,10 @@ async def filterAdvisform(Advisform:AdvisingForms):
     sql = sql+" "
     sql = sql+ "OFFSET" + " " + str(offsets)
     sql = sql + ";"
+    print(sql)
     res = cnx.query(sql)
     result = res['data']
+    print(result)
     if(len(result) ==0):
         send = 'Invalid Advising filters'
     else:
