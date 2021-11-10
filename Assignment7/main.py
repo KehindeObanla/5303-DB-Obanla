@@ -407,6 +407,7 @@ async def Allstudent():
 
 @app.get("/student/Mnumber/{Mnumber}")
 async def StudentMnumber (Mnumber:str):
+    
     sql =f'SELECT * FROM `StudentIInfo` WHERE `Mnumber` ="{Mnumber}"'
     res = cnx.query(sql)
     result = res['data']

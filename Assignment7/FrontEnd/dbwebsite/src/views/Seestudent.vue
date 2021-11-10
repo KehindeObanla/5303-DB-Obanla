@@ -59,7 +59,7 @@
           </td>
           <td>
             GpaEval<select name="GPAL" id="GPAL" v-model="tosend.GPAL">
-               <option value=""></option>
+               <option value="" selected ></option>
               <option value="0">Greater</option>
               <option value="1">Less</option>
               <option value="2">Equal</option>
@@ -116,8 +116,8 @@ data() {
         FirstName: "",
         LastName: "",
         Classification: "",
-        Gpa: -1,
-        GPAL:0,
+        Gpa: 0,
+        GPAL:"",
         Display:25,
         offset:0
       },
@@ -143,13 +143,14 @@ data() {
       
       if(count ==1 && "Display" in otherdic)
       {
+        
         axios
         .get("http://143.244.153.25:8004/student").then((res) => {
           //Perform Success Action
           if(res.data !="Invalid student filters")
           {
-              console.log("works")
-              console.log(res.data)
+              
+              
               this.tableStuff = res.data
                //for later how to display next
               this.countTable = this.tableStuff.length
@@ -173,6 +174,7 @@ data() {
         });
       }
       else{
+         
         axios
         .post("http://143.244.153.25:8004/filterstudent",JSON.stringify(otherdic), {
           headers: { "Content-Type": "application/json" },
