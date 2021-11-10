@@ -53,8 +53,10 @@
       </select>
 
       <label for="Major">Major:</label><br />
-      <input type="text" id="Major" name="Major" v-model="tosend.Major" /><br />
-
+      <input type="text"  list="Major"  v-model="tosend.Major" />
+      <datalist name="Major" id="Major">
+        <option v-for="item in Majors" :key="item" :value="item" />
+      </datalist>
       <label for="ListofCourses">ListofCourses:</label><br />
       <input
         type="text"
@@ -103,6 +105,71 @@ export default {
       passwordError: "",
       htmldoc: "",
       image: "",
+       Majors: [
+        "Accounting, B.B.A.",
+        "Applied Arts and Sciences, B.A.A.S.",
+        "Art B.F.A. with Teacher Certification",
+        "Art, B.A.",
+        "Art, B.F.A.",
+        "Athletic Training, B.S.A.T.",
+        "Bilingual Generalist and General Education EC-6, B.S.I.S. (Spanish)",
+        "Biology, B.S.",
+        "Biology-Life Science, B.S. with Secondary Certification (Grades 7-12)",
+        "Chemistry, B.S.",
+        "Composite Science, B.S. with Secondary Certification (Grades 7-12)",
+        "Computer Science, B.A.",
+        "Computer Science, B.S.",
+        "Criminal Justice, B.S.C.J.",
+        "Dental Early Admissions Program ",
+        "Dental Hygiene, B.S.D.H.",
+        "Early Childhood Through Grade 6 (EC-6), B.S.I.S.",
+        "Economics, B.B.A.",
+        "English, B.A.",
+        "Exercise Physiology, B.S.E.P.",
+        "Finance, B.B.A.",
+        "French ",
+        "General Business, B.B.A.",
+        "Geosciences, B.S.",
+        "Global Studies, B.A.",
+        "Humanities, B.A.",
+        "Kinesiology  B.A. ",
+        "Kinesiology  B.S.",
+        "Management Information Systems, B.B.A.",
+        "Management, B.B.A.",
+        "Marketing, B.B.A.",
+        "Mass Communication, B.A.",
+        "Mathematics (4-8 Certificate), B.S.I.S.",
+        "Mathematics, B.A.",
+        "Mathematics, B.S.",
+        "Mathematics, B.S. with Secondary Certification (Grades 7-12)",
+        "Mechanical Engineering, B.S.M.E.",
+        "Music Instrumental Emphasis, B.M. ",
+        "Music Vocal Emphasis, B.M. ",
+        "Music, B.A.",
+        "Music, B.M.",
+        "Nursing - Accelerated Second Bachelor’s B.S.N. (Pre-licensure)",
+        "Nursing - RN Transition Program, B.S.N. (Post-licensure)",
+        "Nursing, B.S.N. (Pre-licensure)",
+        "Physics, B.S.",
+        "Political Science, B.A.",
+        "Psychology, B.A.",
+        "Psychology, B.S.",
+        "Radiologic Sciences, B.S.R.S.",
+        "Radiologic Technology, B.S.R.T.",
+        "Registered Respiratory Therapist-to-BSRC Program",
+        "Respiratory Care, B.S.R.C.",
+        "Social Studies (4-8 Certificate), B.S.I.S.",
+        "Social Work, B.S.W.",
+        "Sociology, B.A.",
+        "Sociology, B.S.",
+        "Spanish (Grades EC-12, All-Level), B.A. with Teacher Certification",
+        "Spanish, B.A.",
+        "Special Education Early Childhood B.S.I.S.",
+        "Sport and Leisure Studies, B.A.",
+        "Sport and Leisure Studies, B.S.",
+        "Theatre B.F.A. Teacher Certification",
+        "Theatre, B.F.A.",
+      ],
     };
   },
   methods: {
