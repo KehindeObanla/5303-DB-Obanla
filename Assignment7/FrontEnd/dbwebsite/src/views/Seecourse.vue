@@ -10,6 +10,7 @@
 			<tr>
 				<td>
 					Semester<select name="Semester" id="Semester"  v-model="tosend.Season">
+            <option value="" selected></option>
 						<option value="Fall">Fall</option>
 						<option value="Spring">Spring</option>
 						<option value="Summer1">Summer1</option>
@@ -71,6 +72,7 @@
             </td>
          <td>
 				 Days<select name="Days" id="Days" v-model="tosend.Days">
+           <option value="" selected></option>
           <option value="M">Monday</option>
           <option value="T">Tuesday</option>
           <option value="W">Wednesday</option>
@@ -90,6 +92,7 @@
 			 <td>End<input type="time" id="End" name="End" v-model="tosend.End" /></td>
        <td>
 					 Year<select name="year" id="year"  v-model="tosend.year">
+             <option value="" selected ></option>
 						 <option value="2021">2021</option>
 						 <option value="2022">2022</option>
 					   </select>
@@ -178,7 +181,7 @@ data() {
         Bldg:"",
         Room: "",
         year: 2022,
-        Season: "Fall",
+        Season: "",
         Display:25,
         Offset:0
       },
@@ -287,10 +290,12 @@ data() {
   methods:{
     Seecourse(){
       var otherdic = {}
+      var count =0
       for (var things in this.tosend){
          if(this.tosend[things] != "")
          {
            otherdic[things] = this.tosend[things]
+           count++
          }
       }
       console.log(JSON.stringify(otherdic))

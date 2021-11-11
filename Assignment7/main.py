@@ -32,12 +32,20 @@ def Timetwenty(converted):
     out_time = datetime.strftime(in_time, "%H:%M")
     return out_time
 
+def justUpfate(converted):
+    in_time = datetime.strptime(converted, "%H:%M:%S")
+    out_time = datetime.strftime(in_time, "%H:%M")
+    return out_time
+def update(converted):
+    in_time = datetime.strptime(converted, "%H:%M")
+    out_time = datetime.strftime(in_time, "%H:%M")
+    return out_time
+
 def formatResult(res):
     result = res['data']
     if(len(result) ==0):
         return 'invalid subject'
     else:
-
         response =[]
         for courses in result:
             if('Begin' in courses):
@@ -184,15 +192,26 @@ with open('/var/www/html/Database/.config.json') as f:
 
 cnx = MysqlCnx(**config)
 
+@app.get("/courses")
+async def Allcourses():
+    sql ='SELECT * FROM `CourseInfo`'
+    res = cnx.query(sql)
+    return formatResult(res)
 
 @app.get("/courses/Crn/{Crn}")
 async def CRN(Crn:str):
     sql = f'SELECT * FROM `CourseInfo` WHERE `Crn` ="{Crn}"'
     res = cnx.query(sql)
     result = res['data']
-    result[0]['Begin'] =Timetwelve(str(result[0]['Begin']))
-    result[0]['End']=Timetwelve(str(result[0]['End']))
-    return result
+    """ result[0]['Begin'] =Timetwelve(str(result[0]['Begin']))
+    result[0]['End']=Timetwelve(str(result[0]['End'])) """
+    if(len(result) ==0):
+        return 'invalid CRN'
+    else:
+        result[0]['Begin'] =justUpfate(str(result[0]['Begin']))
+        result[0]['End']=justUpfate(str(result[0]['End']))
+        return result
+    
 @app.get("/courses/Subj/{Subj}")
 async def Subj(Subj :str):
     sql = f'SELECT * FROM `CourseInfo` WHERE `Subj` ="{Subj}" ORDER BY `CourseInfo`.`year` DESC'
@@ -337,9 +356,9 @@ async def filterall(sqlList:filter):
                 sql = sql + " " + '`' + x +'`'  + " " + "LIKE"+ " "+ "'" +PIT +"'"
             elif(x =="Aval"):
                 if(y == 1):  
-                    sql = sql + " " + '`' + x +'`'  + " " + ">"+ " "+ "'" +str(y) +"'"
+                    sql = sql + " " + '`' + x +'`'  + " " + ">="+ " "+ "'" +str(y) +"'"
                 else:
-                    sql = sql + " " + '`' + x +'`'  + " " + "="+ " "+ "'" +str(0) +"'"
+                    sql = sql + " " + '`' + x +'`'  + " " + "<="+ " "+ "'" +str(0) +"'"
             elif(x =="Days"):
                 if(y =='SU'):
                     firstchar = y+'%'
@@ -358,9 +377,9 @@ async def filterall(sqlList:filter):
                 sql = sql+addand + " " + '`' + x +'`'  + " " + "LIKE"+ " "+ "'" +PIT +"'"
             elif(x =="Aval"):
                 if(y == 1):  
-                    sql = sql+ addand +  " " + '`' + x +'`'  + " " + ">"+ " "+ "'" +str(y) +"'"
+                    sql = sql+ addand +  " " + '`' + x +'`'  + " " + ">="+ " "+ "'" +str(y) +"'"
                 else:
-                    sql = sql + addand +  " " + '`' + x +'`'  + " " + "="+ " "+ "'" +str(0) +"'"
+                    sql = sql + addand +  " " + '`' + x +'`'  + " " + "<="+ " "+ "'" +str(0) +"'"
             elif(x =="Days"):
                 if(y =='SU'):
                     firstchar = y+'%'
@@ -377,9 +396,9 @@ async def filterall(sqlList:filter):
                 sql = sql + " " + '`' + x +'`'  + " " + "LIKE"+ " "+ "'" +PIT +"'"
             elif(x =="Aval"):
                 if(y == 1):  
-                    sql = sql + " " + '`' + x +'`'  + " " + ">"+ " "+ "'" +str(y) +"'"
+                    sql = sql + " " + '`' + x +'`'  + " " + ">="+ " "+ "'" +str(y) +"'"
                 else:
-                    sql = sql + " " + '`' + x +'`'  + " " + "="+ " "+ "'" +str(0) +"'"
+                    sql = sql + " " + '`' + x +'`'  + " " + "<="+ " "+ "'" +str(0) +"'"
             elif(x =="Days"):
                 if(y =='SU'):
                     firstchar = y+'%'
@@ -392,6 +411,7 @@ async def filterall(sqlList:filter):
     sql = sql+" "
     sql = sql+ "OFFSET" + " " + str(offsets)
     sql = sql + ";" 
+    print(sql)
     res = cnx.query(sql)
     result = res['data']
     if(len(result) ==0):
@@ -671,9 +691,9 @@ async def AdvisingformPatch(sqlList:patchcourse):
     if(sqlList.Days!=None):
         response['Days'] = sqlList.Days
     if(sqlList.Begin!=None):
-        response['Begin'] = Timetwenty(str(sqlList.Begin))
+        response['Begin'] = update(str(sqlList.Begin))
     if(sqlList.End!=None):
-        response['End'] = Timetwenty(str(sqlList.End))
+        response['End'] = update(str(sqlList.End))
     if(sqlList.Bldg!=None):
         response['Bldg'] = sqlList.Bldg
     if(sqlList.Room!=None):
@@ -685,7 +705,6 @@ async def AdvisingformPatch(sqlList:patchcourse):
     sql = sql + " WHERE `CourseInfo`.`Crn` = "
     sql = sql + "'"+str(sqlList.Crn)+"'"
     sql = sql + ";"
-    
     res = cnx.query(sql)
     return res
 

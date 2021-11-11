@@ -147,10 +147,8 @@ data() {
         axios
         .get("http://143.244.153.25:8004/student").then((res) => {
           //Perform Success Action
-          if(res.data !="Invalid student filters")
+          if(res.data !="invalid subject")
           {
-              
-              
               this.tableStuff = res.data
                //for later how to display next
               this.countTable = this.tableStuff.length

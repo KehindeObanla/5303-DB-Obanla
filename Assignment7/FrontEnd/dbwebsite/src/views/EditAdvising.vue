@@ -33,7 +33,6 @@
         type="text"
         id="StudentID"
         name="StudentID"
-        
         v-model="tosend.StudentID"
         :placeholder="PStudentID"
       /><br />
