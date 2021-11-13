@@ -328,6 +328,13 @@ export default {
       }
     },
     Updatecourse() {
+      this.tosend.Col = this.PCol;
+            this.tosend.Subj = this.PSubj;
+            this.tosend.Begin = this.PBegin;
+            this.tosend.End = this.PEnd;
+            this.tosend.Bldg = this.PBldg;
+            this.tosend.year = this.Pyear;
+            this.tosend.Season = this.PSeason;
       var otherdic = {};
       for (var things in this.tosend) {
         if (this.tosend[things] != "") {

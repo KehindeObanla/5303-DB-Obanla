@@ -115,6 +115,7 @@ export default {
   },
   methods: {
     UpdateStudent() {
+      this.tosend.Classification = this.PClassification
       var otherdic = {}
       for (var things in this.tosend){
          if(this.tosend[things] != "")
@@ -133,7 +134,6 @@ export default {
           //Perform Success Action
           // JSON responses are automatically parsed.
           this.post = res.data;
-          
           if (this.post["success"] == true) {
             this.reset();
             this.passwordError="Updated!!"

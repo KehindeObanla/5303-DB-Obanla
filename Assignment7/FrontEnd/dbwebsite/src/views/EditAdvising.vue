@@ -263,6 +263,11 @@ export default {
       }
     },
     UpdateAdvising() {
+      this.tosend.Classification = this.PClassification;
+            this.tosend.Semester = this.PSemester;
+            this.tosend.Year = this.PYear;
+            this.tosend.Major = this.PMajor;
+             this.tosend.DateCreated = this.PDateCreated;
       var otherdic = {};
       for (var things in this.tosend) {
         if (this.tosend[things] != "") {
