@@ -7,7 +7,13 @@
     <div ref="content">
       <h1>Enter Studnet info</h1>
       <label for="Fname">FirstName:</label><br />
-      <input type="text" id="Fname" name="Fname" v-model="tosend.FirstName" required/>
+      <input
+        type="text"
+        id="Fname"
+        name="Fname"
+        v-model="tosend.FirstName"
+        required
+      />
 
       <label for="Lname">LastName:</label><br />
       <input
@@ -31,7 +37,6 @@
       <select
         name="Classification"
         id="Classification"
-        
         v-model="tosend.Classification"
       >
         <option value="Freshman">Freshman</option>
@@ -49,20 +54,13 @@
       /><br />
 
       <label for="Gpa">Gpa:</label><br />
-      <input
-        type="text"
-        id="Gpa"
-        name="Gpa"
-        
-        v-model="tosend.Gpa"
-      /><br />
+      <input type="text" id="Gpa" name="Gpa" v-model="tosend.Gpa" /><br />
 
       <label for="GithubUname">Github username:</label>
       <input
         type="text"
         id="GithubUname"
         name="GithubUname"
-        
         v-model="tosend.GithubUname"
       />
     </div>

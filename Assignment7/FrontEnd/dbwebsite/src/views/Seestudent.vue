@@ -55,11 +55,18 @@
             </select>
           </td>
           <td>
-            GPA <input type="number" id="Gpa" name="Gpa" v-model="tosend.Gpa" step="0.01" />
+            GPA
+            <input
+              type="number"
+              id="Gpa"
+              name="Gpa"
+              v-model="tosend.Gpa"
+              step="0.01"
+            />
           </td>
           <td>
             GpaEval<select name="GPAL" id="GPAL" v-model="tosend.GPAL">
-               <option value="" selected ></option>
+              <option value="" selected></option>
               <option value="0">Greater</option>
               <option value="1">Less</option>
               <option value="2">Equal</option>
@@ -72,28 +79,27 @@
       <button>GO</button>
     </div>
   </form>
-   <div ref="tableadd" id ="tableadd" >
-   <table v-show="hasArrived" class ="doneTable">
-    <tr>
-    <th>FirstName</th>
-    <th>LastName</th>
-    <th>Mnumber</th>
-    <th>Classification</th>
-    <th>Email</th>
-    <th>Gpa</th>
-    <th>Github name</th>
-  </tr>
-    <tr v-for="item in tableStuff" v-show ="hasTable"> 
-      <th>{{item.FirstName}}</th>
-      <th>{{item.LastName}}</th>
-      <th>{{item.Mnumber}}</th>
-      <th>{{item.Classification}}</th>
-      <th>{{item.Email}}</th>
-      <th>{{item.GPA}}</th>
-      <th>{{item.GitHubUname}}</th>
-
-    </tr>
-   </table>
+  <div ref="tableadd" id="tableadd">
+    <table v-show="hasArrived" class="doneTable">
+      <tr>
+        <th>FirstName</th>
+        <th>LastName</th>
+        <th>Mnumber</th>
+        <th>Classification</th>
+        <th>Email</th>
+        <th>Gpa</th>
+        <th>Github name</th>
+      </tr>
+      <tr v-for="item in tableStuff" v-show="hasTable">
+        <th>{{ item.FirstName }}</th>
+        <th>{{ item.LastName }}</th>
+        <th>{{ item.Mnumber }}</th>
+        <th>{{ item.Classification }}</th>
+        <th>{{ item.Email }}</th>
+        <th>{{ item.GPA }}</th>
+        <th>{{ item.GitHubUname }}</th>
+      </tr>
+    </table>
   </div>
   <div id="divCheckbox" v-show="hasArrived">
     <button @click="tosend.Offset = tosend.Display">next</button>
@@ -109,7 +115,7 @@
 <script>
 import axios from "axios";
 export default {
-data() {
+  data() {
     return {
       tosend: {
         Mnumber: "",
@@ -117,109 +123,95 @@ data() {
         LastName: "",
         Classification: "",
         Gpa: 0,
-        GPAL:"",
-        Display:25,
-        offset:0
+        GPAL: "",
+        Display: 25,
+        offset: 0,
       },
-      hasArrived:false,
+      hasArrived: false,
       tableStuff: [],
-      countTable :0,
-      hasTable:false
-      
+      countTable: 0,
+      hasTable: false,
     };
   },
-    methods:{
-    SeeStudent(){
-      var otherdic = {}
-      var count =0
-      for (var things in this.tosend)
-      {
-         if(this.tosend[things] != "")
-         {
-           otherdic[things] = this.tosend[things]
-           count++
-         }
+  methods: {
+    SeeStudent() {
+      var otherdic = {};
+      var count = 0;
+      for (var things in this.tosend) {
+        if (this.tosend[things] != "") {
+          otherdic[things] = this.tosend[things];
+          count++;
+        }
       }
-      
-      if(count ==1 && "Display" in otherdic)
-      {
-        
-        axios
-        .get("http://143.244.153.25:8004/student").then((res) => {
-          //Perform Success Action
-          if(res.data !="invalid subject")
-          {
-              this.tableStuff = res.data
-               //for later how to display next
-              this.countTable = this.tableStuff.length
-              this.hasArrived = true
-              this.hasTable =true
-          }
-          else{
-              this.hasArrived = true
-              this.hasTable = false
-          }
-          
-          
-        })
-        .catch((error) => {
-          // error.response.status Check status code
-          console.log(error);
-        })
-        .finally(() => {
-          //Perform action in always
-          
-        });
-      }
-      else{
-         
-        axios
-        .post("http://143.244.153.25:8004/filterstudent",JSON.stringify(otherdic), {
-          headers: { "Content-Type": "application/json" },
-        })
-        .then((res) => {
-          //Perform Success Action
-          if(res.data !="Invalid student filters")
-          {
-              console.log("fuck")
-              
-              this.tableStuff = res.data
-               //for later how to display next
-              this.countTable = this.tableStuff.length
-              this.hasArrived = true
-              this.hasTable =true
-          }
-          else{
-              this.hasArrived = true
-              this.hasTable = false
-          }
-          
-          
-        })
-        .catch((error) => {
-          // error.response.status Check status code
-          console.log(error);
-        })
-        .finally(() => {
-          //Perform action in always
-          
-        });
-      }
-      
-    }
-  },
-   watch:{
-'tosend.Display':function(val){
-   this.tosend.Display =val
-   this.Seecourse()
-},
-'tosend.Offset':function(val){
-  this.tosend.Offset =val
-  this.Seecourse()
-}
-  }
 
-}
+      if (count == 1 && "Display" in otherdic) {
+        axios
+          .get("http://143.244.153.25:8004/student")
+          .then((res) => {
+            //Perform Success Action
+            if (res.data != "invalid subject") {
+              this.tableStuff = res.data;
+              //for later how to display next
+              this.countTable = this.tableStuff.length;
+              this.hasArrived = true;
+              this.hasTable = true;
+            } else {
+              this.hasArrived = true;
+              this.hasTable = false;
+            }
+          })
+          .catch((error) => {
+            // error.response.status Check status code
+            console.log(error);
+          })
+          .finally(() => {
+            //Perform action in always
+          });
+      } else {
+        axios
+          .post(
+            "http://143.244.153.25:8004/filterstudent",
+            JSON.stringify(otherdic),
+            {
+              headers: { "Content-Type": "application/json" },
+            }
+          )
+          .then((res) => {
+            //Perform Success Action
+            if (res.data != "Invalid student filters") {
+              console.log("fuck");
+
+              this.tableStuff = res.data;
+              //for later how to display next
+              this.countTable = this.tableStuff.length;
+              this.hasArrived = true;
+              this.hasTable = true;
+            } else {
+              this.hasArrived = true;
+              this.hasTable = false;
+            }
+          })
+          .catch((error) => {
+            // error.response.status Check status code
+            console.log(error);
+          })
+          .finally(() => {
+            //Perform action in always
+          });
+      }
+    },
+  },
+  watch: {
+    "tosend.Display": function (val) {
+      this.tosend.Display = val;
+      this.Seecourse();
+    },
+    "tosend.Offset": function (val) {
+      this.tosend.Offset = val;
+      this.Seecourse();
+    },
+  },
+};
 </script>
 
 <style scoped>
@@ -236,7 +228,8 @@ button {
   width: 100%;
 }
 
-.doneTable th, .doneTable td{
+.doneTable th,
+.doneTable td {
   text-align: left;
   padding: 8px;
   border: 1px solid black;

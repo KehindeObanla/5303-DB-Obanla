@@ -3,39 +3,61 @@
     <button @click="$router.push('mainpage')">Home</button>
     <button @click="$router.push('Seecourse')">See All Courses</button>
   </div>
-  <div v-show ="showMnumber">
-     <form v-on:submit.prevent="getadvsing" class="getadvsing">
+  <div v-show="showMnumber">
+    <form v-on:submit.prevent="getadvsing" class="getadvsing">
       <label for="CostAd">Enter CRN</label><br />
-    <input type="text" id="CostAd" name="CostAd" v-model ="PCrn">
-    <div class="submit">
-      <button>Submit</button>
-    </div>
-     </form> 
+      <input type="text" id="CostAd" name="CostAd" v-model="PCrn" />
+      <div class="submit">
+        <button>Submit</button>
+      </div>
+    </form>
   </div>
-  <form v-on:submit.prevent="Updatecourse" class="Updatecourse"  v-show="showform">
+  <form
+    v-on:submit.prevent="Updatecourse"
+    class="Updatecourse"
+    v-show="showform"
+  >
     <div ref="content">
       <h1>Enter Course</h1>
-      
+
       <label for="Col">College(Abrv):</label><br />
-      <input type="text"  list="Cols" v-model="PCol"  />
-      <datalist  name="Col" id="Cols">
+      <input type="text" list="Cols" v-model="PCol" />
+      <datalist name="Col" id="Cols">
         <option v-for="item in Cols" :key="item" :value="item" />
       </datalist>
 
       <label for="Crn">Crn:</label><br />
-      <input type="text" id="Crn" name="Crn" v-model="tosend.Crn" :placeholder="PCrn" />
+      <input
+        type="text"
+        id="Crn"
+        name="Crn"
+        v-model="tosend.Crn"
+        :placeholder="PCrn"
+      />
 
       <label for="Subj">Subject(Abrv):</label><br />
-      <input type="text"  list="Subj" v-model="PSubj"/>
-      <datalist name="Subj" id="Subj" >
+      <input type="text" list="Subj" v-model="PSubj" />
+      <datalist name="Subj" id="Subj">
         <option v-for="item in Subjs" :key="item" :value="item" />
       </datalist>
 
       <label for="Crse">Course:</label><br />
-      <input type="text" id="Crse" name="Crse"  v-model="tosend.Crse" :placeholder="PCrse"  />
+      <input
+        type="text"
+        id="Crse"
+        name="Crse"
+        v-model="tosend.Crse"
+        :placeholder="PCrse"
+      />
 
       <label for="Sect">Section:</label><br />
-      <input type="text" id="Sect" name="Sect"  v-model="tosend.Sect" :placeholder="PSect"/>
+      <input
+        type="text"
+        id="Sect"
+        name="Sect"
+        v-model="tosend.Sect"
+        :placeholder="PSect"
+      />
       <label for="Title">Title:</label><br />
       <input
         type="text"
@@ -53,35 +75,65 @@
         v-model="tosend.PrimaryInstructor"
       />
       <label for="Max">Max:</label><br />
-      <input type="number" id="Max" name="Max" v-model="tosend.Max" :placeholder="PMax"/>
+      <input
+        type="number"
+        id="Max"
+        name="Max"
+        v-model="tosend.Max"
+        :placeholder="PMax"
+      />
       <label for="Curr">Current:</label><br />
-      <input type="number" id="Curr" name="Curr" v-model="tosend.Curr" :placeholder="PCurr" />
+      <input
+        type="number"
+        id="Curr"
+        name="Curr"
+        v-model="tosend.Curr"
+        :placeholder="PCurr"
+      />
       <label for="Aval">Avalable:</label><br />
-      <input type="number" id="Aval" name="Aval" v-model="tosend.Aval" :placeholder="PAval"/>
+      <input
+        type="number"
+        id="Aval"
+        name="Aval"
+        v-model="tosend.Aval"
+        :placeholder="PAval"
+      />
       <label for="Days">Days:</label><br />
-      <input type="text" id="Days" name="Days" v-model="tosend.Days" :placeholder="PDays"/>
+      <input
+        type="text"
+        id="Days"
+        name="Days"
+        v-model="tosend.Days"
+        :placeholder="PDays"
+      />
       <label for="Begin">Begin:</label><br />
       <input type="time" id="Begin" name="Begin" v-model="PBegin" />
       <label for="End">End:</label><br />
       <input type="time" id="End" name="End" v-model="PEnd" />
 
       <label for="Bldg">Buliding(Abrv):</label><br />
-      <input type="text"  list="Bldg"  v-model="PBldg" />
+      <input type="text" list="Bldg" v-model="PBldg" />
       <datalist name="Bldg" id="Bldg">
         <option v-for="item in Bldgs" :key="item" :value="item" />
       </datalist>
 
       <label for="Room">Room Number:</label><br />
-      <input type="text" id="Room" name="Room" v-model="tosend.Room" :placeholder="PRoom"/>
+      <input
+        type="text"
+        id="Room"
+        name="Room"
+        v-model="tosend.Room"
+        :placeholder="PRoom"
+      />
 
       <label for="year">Choose a Year:</label><br />
-      <select name="year" id="year"  v-model="Pyear">
+      <select name="year" id="year" v-model="Pyear">
         <option value="2021">2021</option>
         <option value="2022">2022</option>
       </select>
 
       <label for="Semester">Choose a Semester:</label><br />
-      <select name="Semester" id="Semester"  v-model="PSeason">
+      <select name="Semester" id="Semester" v-model="PSeason">
         <option value="Fall">Fall</option>
         <option value="Spring">Spring</option>
         <option value="Summer1">Summer1</option>
@@ -101,9 +153,9 @@ export default {
   data() {
     return {
       tosend: {
-        Col:"",
+        Col: "",
         Crn: "",
-        Subj:"",
+        Subj: "",
         Crse: "",
         Sect: "",
         Title: "",
@@ -114,125 +166,125 @@ export default {
         Days: "",
         Begin: "",
         End: "",
-        Bldg:"",
+        Bldg: "",
         Room: "",
         year: 0,
         Season: "",
       },
       passwordError: "",
       Cols: ["HH", "BA", "ED", "FA", "HM", "UN", "SE"],
-       Subjs: [
-          "ACCT",
-          "AGBU",
-          "AMUS",
-          "ART",
-          "ATRN",
-          "BAAS",
-          "BIOL",
-          "BUAD",
-          "CHEM",
-          "CMPS",
-          "COUN",
-          "CRJU",
-          "DNHY",
-          "ECED",
-          "ECON",
-          "EDBE",
-          "EDLE",
-          "EDUC",
-          "ENGL",
-          "ENSC",
-          "EPSY",
-          "ETEC",
-          "EXPH",
-          "FINC",
-          "FREN",
-          "GEOG",
-          "GEOS",
-          "GERM",
-          "GLBS",
-          "GNMT",
-          "GNSC",
-          "HIST",
-          "HSAD",
-          "HSHS",
-          "HUMN",
-          "IDT",
-          "KNES",
-          "LSBA",
-          "MATH",
-          "MCOM",
-          "MENG",
-          "MGMT",
-          "MIS",
-          "MKTG",
-          "MLSC",
-          "MUSC",
-          "MWSU",
-          "NURS",
-          "PETE",
-          "PHIL",
-          "PHYS",
-          "POLS",
-          "PSYC",
-          "RADS",
-          "READ",
-          "RESP",
-          "SOCL",
-          "SOST",
-          "SOWK",
-          "SPAD",
-          "SPAN",
-          "SPCH",
-          "SPED",
-          "STAT",
-          "STEM",
-          "TECH",
-          "THEA",
-          "UGRO",
-          "X21",
-        ],
-        Bldgs: [
-          "BH",
-          "BO",
-          "BW",
-          "CE",
-          "CL",
-          "CO",
-          "CR",
-          "DB",
-          "FA",
-          "FM",
-          "HA",
-          "LI",
-          "MA",
-          "MY",
-          "OR",
-          "PS",
-          "PY",
-          "SITE",
-          "TC",
-          "UNT",
-          "VB",
-        ],
-        PCol:"",
-        PCrn: "",
-        PSubj:"",
-        PCrse: "NO course",
-        PSect: "NO Section",
-        PTitle: "NO Title",
-        PPrimaryInstructor: "NO proffersor",
-        PMax:"NO Max",
-        PCurr:"NO CURR",
-        PAval:"NO Availabel" ,
-        PDays: "NO Days",
-        PBegin: "",
-        PEnd: "",
-        PBldg:"",
-        PRoom: "NO ROOM",
-        Pyear:" ",
-        PSeason: "",
-        showform: false,
+      Subjs: [
+        "ACCT",
+        "AGBU",
+        "AMUS",
+        "ART",
+        "ATRN",
+        "BAAS",
+        "BIOL",
+        "BUAD",
+        "CHEM",
+        "CMPS",
+        "COUN",
+        "CRJU",
+        "DNHY",
+        "ECED",
+        "ECON",
+        "EDBE",
+        "EDLE",
+        "EDUC",
+        "ENGL",
+        "ENSC",
+        "EPSY",
+        "ETEC",
+        "EXPH",
+        "FINC",
+        "FREN",
+        "GEOG",
+        "GEOS",
+        "GERM",
+        "GLBS",
+        "GNMT",
+        "GNSC",
+        "HIST",
+        "HSAD",
+        "HSHS",
+        "HUMN",
+        "IDT",
+        "KNES",
+        "LSBA",
+        "MATH",
+        "MCOM",
+        "MENG",
+        "MGMT",
+        "MIS",
+        "MKTG",
+        "MLSC",
+        "MUSC",
+        "MWSU",
+        "NURS",
+        "PETE",
+        "PHIL",
+        "PHYS",
+        "POLS",
+        "PSYC",
+        "RADS",
+        "READ",
+        "RESP",
+        "SOCL",
+        "SOST",
+        "SOWK",
+        "SPAD",
+        "SPAN",
+        "SPCH",
+        "SPED",
+        "STAT",
+        "STEM",
+        "TECH",
+        "THEA",
+        "UGRO",
+        "X21",
+      ],
+      Bldgs: [
+        "BH",
+        "BO",
+        "BW",
+        "CE",
+        "CL",
+        "CO",
+        "CR",
+        "DB",
+        "FA",
+        "FM",
+        "HA",
+        "LI",
+        "MA",
+        "MY",
+        "OR",
+        "PS",
+        "PY",
+        "SITE",
+        "TC",
+        "UNT",
+        "VB",
+      ],
+      PCol: "",
+      PCrn: "",
+      PSubj: "",
+      PCrse: "NO course",
+      PSect: "NO Section",
+      PTitle: "NO Title",
+      PPrimaryInstructor: "NO proffersor",
+      PMax: "NO Max",
+      PCurr: "NO CURR",
+      PAval: "NO Availabel",
+      PDays: "NO Days",
+      PBegin: "",
+      PEnd: "",
+      PBldg: "",
+      PRoom: "NO ROOM",
+      Pyear: " ",
+      PSeason: "",
+      showform: false,
       showMnumber: true,
       answer: {},
       post: "",
@@ -244,7 +296,7 @@ export default {
         .get("http://143.244.153.25:8004/courses/Crn/" + this.PCrn)
         .then((res) => {
           this.answer = res.data[0];
-          console.log(res.data)
+          console.log(res.data);
           console.log(this.answer);
           if (res.data != "invalid CRN") {
             if (this.answer.Col != "") {
@@ -252,7 +304,7 @@ export default {
             }
             if (this.answer.Crn != "") {
               this.PCrn = this.answer.Crn;
-               this.tosend.Crn = this.PCrn;
+              this.tosend.Crn = this.PCrn;
             }
             if (this.answer.Subj != "") {
               this.PSubj = this.answer.Subj;
@@ -269,7 +321,7 @@ export default {
             if (this.answer.PrimaryInstructor != "") {
               this.PPrimaryInstructor = this.answer.PrimaryInstructor;
             }
-            if (this.answer.Max !="") {
+            if (this.answer.Max != "") {
               this.PMax = this.answer.Max;
             }
             if (this.answer.Curr != "") {
@@ -281,10 +333,10 @@ export default {
             if (this.answer.Days != "") {
               this.PDays = this.answer.Days;
             }
-            if (this.answer.Begin !="") {
+            if (this.answer.Begin != "") {
               this.PBegin = this.answer.Begin;
             }
-            if (this.answer.End !="") {
+            if (this.answer.End != "") {
               this.PEnd = this.answer.End;
             }
             if (this.answer.Bldg != "") {
@@ -329,19 +381,19 @@ export default {
     },
     Updatecourse() {
       this.tosend.Col = this.PCol;
-            this.tosend.Subj = this.PSubj;
-            this.tosend.Begin = this.PBegin;
-            this.tosend.End = this.PEnd;
-            this.tosend.Bldg = this.PBldg;
-            this.tosend.year = this.Pyear;
-            this.tosend.Season = this.PSeason;
+      this.tosend.Subj = this.PSubj;
+      this.tosend.Begin = this.PBegin;
+      this.tosend.End = this.PEnd;
+      this.tosend.Bldg = this.PBldg;
+      this.tosend.year = this.Pyear;
+      this.tosend.Season = this.PSeason;
       var otherdic = {};
       for (var things in this.tosend) {
         if (this.tosend[things] != "") {
           otherdic[things] = this.tosend[things];
         }
       }
-      console.log(otherdic)
+      console.log(otherdic);
       axios
         .patch(
           "http://143.244.153.25:8004/Updatecourse",

@@ -53,7 +53,7 @@
       </select>
 
       <label for="Major">Major:</label><br />
-      <input type="text"  list="Major"  v-model="tosend.Major" />
+      <input type="text" list="Major" v-model="tosend.Major" />
       <datalist name="Major" id="Major">
         <option v-for="item in Majors" :key="item" :value="item" />
       </datalist>
@@ -105,7 +105,7 @@ export default {
       passwordError: "",
       htmldoc: "",
       image: "",
-       Majors: [
+      Majors: [
         "Accounting, B.B.A.",
         "Applied Arts and Sciences, B.A.A.S.",
         "Art B.F.A. with Teacher Certification",

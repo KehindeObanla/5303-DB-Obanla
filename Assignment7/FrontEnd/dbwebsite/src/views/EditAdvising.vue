@@ -1,102 +1,106 @@
 <template>
-   <div>
+  <div>
     <button @click="$router.push('mainpage')">Home</button>
     <button @click="$router.push('SeeAdvising')">See All Advising forms</button>
   </div>
-  <div v-show ="showMnumber">
-     <form v-on:submit.prevent="getadvsing" class="getadvsing">
+  <div v-show="showMnumber">
+    <form v-on:submit.prevent="getadvsing" class="getadvsing">
       <label for="CostAd">Enter Mnumber</label><br />
-    <input type="text" id="CostAd" name="CostAd" v-model ="PStudentID">
-    <div class="submit">
-      <button>Submit</button>
-    </div>
-     </form> 
+      <input type="text" id="CostAd" name="CostAd" v-model="PStudentID" />
+      <div class="submit">
+        <button>Submit</button>
+      </div>
+    </form>
   </div>
-<div>
-<form v-on:submit.prevent="UpdateAdvising" class="Updateadvsing" v-show="showform">
-    <div ref="content">
-      <h1>Enter Advising Form</h1>
-      <label for="Fname">FirstName:</label><br />
-      <input type="text" id="Fname" name="Fname" v-model="tosend.FirstName" :placeholder="PFirstName"/>
+  <div>
+    <form
+      v-on:submit.prevent="UpdateAdvising"
+      class="Updateadvsing"
+      v-show="showform"
+    >
+      <div ref="content">
+        <h1>Enter Advising Form</h1>
+        <label for="Fname">FirstName:</label><br />
+        <input
+          type="text"
+          id="Fname"
+          name="Fname"
+          v-model="tosend.FirstName"
+          :placeholder="PFirstName"
+        />
 
-      <label for="Lname">LastName:</label><br />
-      <input
-        type="text"
-        id="Lname"
-        name="Lname"
-        v-model="tosend.LastName"
-        :placeholder="PLastName"
-      /><br />
+        <label for="Lname">LastName:</label><br />
+        <input
+          type="text"
+          id="Lname"
+          name="Lname"
+          v-model="tosend.LastName"
+          :placeholder="PLastName"
+        /><br />
 
-      <label for="Mnumber">Mnumber:</label><br />
-      <input
-        type="text"
-        id="StudentID"
-        name="StudentID"
-        v-model="tosend.StudentID"
-        :placeholder="PStudentID"
-      /><br />
-      <label for="Semester">Choose a Semester:</label>
-      <select name="Semester" id="Semester"  v-model="PSemester" >
-        <option value="Fall">Fall</option>
-        <option value="Spring">Spring</option>
-        <option value="Summer1">Summer1</option>
-        <option value="Summer2">Summer2</option>
-      </select>
+        <label for="Mnumber">Mnumber:</label><br />
+        <input
+          type="text"
+          id="StudentID"
+          name="StudentID"
+          v-model="tosend.StudentID"
+          :placeholder="PStudentID"
+        /><br />
+        <label for="Semester">Choose a Semester:</label>
+        <select name="Semester" id="Semester" v-model="PSemester">
+          <option value="Fall">Fall</option>
+          <option value="Spring">Spring</option>
+          <option value="Summer1">Summer1</option>
+          <option value="Summer2">Summer2</option>
+        </select>
 
-      <label for="year">Choose a Year:</label>
-      <select name="year" id="year"  v-model="PYear">
-        <option value="2021">2021</option>
-        <option value="2022">2022</option>
-      </select>
+        <label for="year">Choose a Year:</label>
+        <select name="year" id="year" v-model="PYear">
+          <option value="2021">2021</option>
+          <option value="2022">2022</option>
+        </select>
 
-      <label for="Classification">Choose a Classification:</label>
-      <select
-        name="Classification"
-        id="Classification"
-        
-        v-model="PClassification"
+        <label for="Classification">Choose a Classification:</label>
+        <select
+          name="Classification"
+          id="Classification"
+          v-model="PClassification"
+        >
+          <option value="Freshman">Freshman</option>
+          <option value="Sophomore">Sophomore</option>
+          <option value="junior">junior</option>
+          <option value="Senior">Senior</option>
+        </select>
 
-      >
-        <option value="Freshman">Freshman</option>
-        <option value="Sophomore">Sophomore</option>
-        <option value="junior">junior</option>
-        <option value="Senior">Senior</option>
-      </select>
+        <label for="Major">Major:</label><br />
+        <input type="text" list="Major" v-model="PMajor" />
+        <datalist name="Major" id="Major">
+          <option v-for="item in Majors" :key="item" :value="item" />
+        </datalist>
+        <label for="ListofCourses">ListofCourses:</label><br />
+        <input
+          type="text"
+          id="ListofCourses"
+          name="ListofCourses"
+          v-model="tosend.ListofCourses"
+          :placeholder="PListofCourses"
+        /><br />
 
-      <label for="Major">Major:</label><br />
-      <input type="text"  list="Major"  v-model="PMajor" />
-      <datalist name="Major" id="Major">
-        <option v-for="item in Majors" :key="item" :value="item" />
-      </datalist>
-      <label for="ListofCourses">ListofCourses:</label><br />
-      <input
-        type="text"
-        id="ListofCourses"
-        name="ListofCourses"
-        
-        v-model="tosend.ListofCourses"
-        :placeholder="PListofCourses"
-      /><br />
-
-      <label for="DateCreated">DateCreated:</label>
-      <input
-        type="date"
-        id="DateCreated"
-        name="DateCreated"
-        
-        v-model="PDateCreated"
-        
-      />
-    </div>
-    <div v-if="passwordError" class="error">{{ passwordError }}</div>
-    <div id="addstuff" ref="addstuff"></div>
-    <div class="submit">
-      <button>Submit form</button>
-    </div>
-  </form>
+        <label for="DateCreated">DateCreated:</label>
+        <input
+          type="date"
+          id="DateCreated"
+          name="DateCreated"
+          v-model="PDateCreated"
+        />
+      </div>
+      <div v-if="passwordError" class="error">{{ passwordError }}</div>
+      <div id="addstuff" ref="addstuff"></div>
+      <div class="submit">
+        <button>Submit form</button>
+      </div>
+    </form>
   </div>
-  
 </template>
 
 <script>
@@ -205,7 +209,7 @@ export default {
         .get("http://143.244.153.25:8004/Advising/student/" + this.PStudentID)
         .then((res) => {
           this.answer = res.data[0];
-          console.log(res.data)
+          console.log(res.data);
           console.log(this.answer);
           if (res.data != "Invalid number") {
             if (this.answer.FirstName != "") {
@@ -242,7 +246,7 @@ export default {
             this.tosend.Semester = this.PSemester;
             this.tosend.Year = this.PYear;
             this.tosend.Major = this.PMajor;
-             this.tosend.DateCreated = this.PDateCreated;
+            this.tosend.DateCreated = this.PDateCreated;
           } else {
             this.passwordError = "Invalid Mnumber";
           }
@@ -264,10 +268,10 @@ export default {
     },
     UpdateAdvising() {
       this.tosend.Classification = this.PClassification;
-            this.tosend.Semester = this.PSemester;
-            this.tosend.Year = this.PYear;
-            this.tosend.Major = this.PMajor;
-             this.tosend.DateCreated = this.PDateCreated;
+      this.tosend.Semester = this.PSemester;
+      this.tosend.Year = this.PYear;
+      this.tosend.Major = this.PMajor;
+      this.tosend.DateCreated = this.PDateCreated;
       var otherdic = {};
       for (var things in this.tosend) {
         if (this.tosend[things] != "") {
