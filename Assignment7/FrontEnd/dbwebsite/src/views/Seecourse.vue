@@ -311,19 +311,22 @@ export default {
       tableStuff: [],
       countTable: 0,
       hasTable: false,
+      
     };
   },
   methods: {
     Seecourse() {
       var otherdic = {};
       var count = 0;
+      // check to change offset befor submit
+      /* this.tosend['Offset'] =0 */
       for (var things in this.tosend) {
         if (this.tosend[things] != "") {
           otherdic[things] = this.tosend[things];
           count++;
         }
       }
-      console.log(JSON.stringify(otherdic));
+      
       axios
         .post("http://143.244.153.25:8004/Annony", JSON.stringify(otherdic), {
           headers: { "Content-Type": "application/json" },

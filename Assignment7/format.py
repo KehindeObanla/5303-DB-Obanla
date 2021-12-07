@@ -41,10 +41,8 @@ with open('/var/www/html/Database/.config.json') as f:
     config = json.loads(f.read())
 
 cnx = MysqlCnx(**config)
-student ={
-    "FirstName" =
-}
-""" coursedic = {
+
+coursedic = {
         "Col": "",
         "Crn": "",
         "Subj": "",
@@ -52,9 +50,9 @@ student ={
         "Sect": "",
         "Title": "",
         "PrimaryInstructor": "",
-        "Max": -1,
-        "Curr": -1,
-        "Aval": -1,
+        "Max": 0,
+        "Curr": 0,
+        "Aval": 0,
         "Days": " ",
         "Begin": " ",
         "End":" ",
@@ -62,7 +60,7 @@ student ={
         "Room": " "
 
 }
-f = open('/var/www/html/Database/Assignment7/2021_summer_1_schedule.json')
+f = open('/var/www/html/Database/Assignment7/summer1.json')
 
 data = json.load(f)
 count =0
@@ -104,7 +102,11 @@ for i in data:
             coursedic['Curr'] = dic['Curr']
         if("Aval" in dic):
             if(dic['Aval'] == " "):
-                coursedic['Aval'] =-1
+                testAvl = int(coursedic['Max']) -int(coursedic['Curr'])
+                if(testAvl >= 0):
+                    coursedic['Aval'] = testAvl
+                else:
+                    coursedic['Aval'] =0
             else:
                 coursedic['Aval'] = dic['Aval']
         if("Days" in dic):
@@ -133,7 +135,7 @@ for i in data:
 print(len(data))
 print(len(test))
 print(count)
-print(count2)"""
+print(count2)
 
    
 
