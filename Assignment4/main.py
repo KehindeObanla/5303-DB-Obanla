@@ -7,7 +7,7 @@ from fastapi import FastAPI,Request
 from pydantic import BaseModel;
 from fastapi.responses import RedirectResponse,HTMLResponse
 
-with open('/var/www/html/Database/.config.json') as f:
+with open('/var/www/html/Database/Assignment4/.config.json') as f:
     config = json.loads(f.read())
 
 cnx = MysqlCnx(**config)

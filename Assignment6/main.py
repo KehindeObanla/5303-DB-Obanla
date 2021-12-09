@@ -159,6 +159,8 @@ async def findAllrating(rate:int):
     for rest in res:
         response_rest_list.append(Resturant(**rest))
     return response_rest_list
+if __name__ == "__main__":
+  uvicorn.run(app, host="0.0.0.0", port=8003, log_level="info")
 
 
 
@@ -166,6 +168,3 @@ async def findAllrating(rate:int):
 
 
 
-
-""" if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8003, log_level="info") """

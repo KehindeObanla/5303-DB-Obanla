@@ -11,7 +11,7 @@ locale.setlocale(locale.LC_ALL, '')
 
 app = FastAPI()
 
-with open('/var/www/html/Database/.config.json') as f:
+with open('/var/www/html/Database/Assignment5/.config.json') as f:
     config = json.loads(f.read())
 
 
@@ -297,5 +297,5 @@ async def genre():
         genre.append(g['genre'])
     
     return genre
-if __name__ == "__main__":
-  uvicorn.run(app, host="0.0.0.0", port=8002, log_level="info")
+""" if __name__ == "__main__":
+  uvicorn.run(app, host="0.0.0.0", port=8002, log_level="info") """
